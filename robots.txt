@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /demo/
+Sitemap: https://zackware.de/sitemap.xml
