@@ -1,0 +1,1224 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6b4210">
+<meta name="description" content="ZackImker – die App für Imkerinnen und Imker: Stockkarte, Varroa, Bestandsbuch, Fütterung, Wanderung, Honigernte, Lose und Etiketten, Verkauf. Offline, ohne Abo.">
+<title>ZackImker</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23e3a11b'/%3E%3Cellipse cx='20' cy='23' rx='7' ry='5.5' fill='%233a2508'/%3E%3Cellipse cx='15' cy='15' rx='4.5' ry='3' fill='%23fff'/%3E%3Cellipse cx='25' cy='15' rx='4.5' ry='3' fill='%23fff'/%3E%3C/svg%3E">
+<style>:root{--g:#16794c;--g2:#0f5c39;--g3:#0b4a2e;--gl:#e6f4ec;--gll:#f2faf5;--gold:#f0a500;--goldl:#fff4d6;--red:#c8382f;--redl:#fdecea;--blue:#2f6fb5;--bluel:#e8f0fa;--ink:#17261f;--ink2:#34453d;--muted:#66776e;--bg:#f4f6f2;--card:#fff;--line:#e1e7e2;--line2:#eef2ee;--sh:0 1px 2px rgba(16,40,28,.06),0 4px 14px rgba(16,40,28,.06);--r:14px;--side:252px;color-scheme:light}
+[data-theme=dark]{--g:#3fbf80;--g2:#62d39a;--g3:#9fe8c2;--gl:#16352a;--gll:#122a21;--gold:#ffbf3c;--goldl:#3a2f12;--red:#ff7a70;--redl:#3c1d1a;--blue:#7fb2ff;--bluel:#172a44;--ink:#e8f1ec;--ink2:#c9d7cf;--muted:#93a69b;--bg:#0f1714;--card:#17221d;--line:#26352e;--line2:#1d2a24;--sh:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--g)}
+svg{width:18px;height:18px;flex:none}
+.hidden{display:none!important}
+.muted{color:var(--muted)}.small{font-size:13px}.r{text-align:right}.nowrap{white-space:nowrap}
+.app{display:flex;min-height:100vh}
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:30;transition:transform .2s}
+.brand{display:flex;gap:11px;align-items:center;padding:18px 18px 14px}
+.crest{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,var(--g),var(--g3));color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px;overflow:hidden;flex:none;box-shadow:0 3px 10px rgba(22,121,76,.3)}
+.crest img{width:100%;height:100%;object-fit:cover}
+.brand b{display:block;font-size:15.5px;line-height:1.2;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand span{font-size:12px;color:var(--muted)}
+.nav{flex:1;overflow:auto;padding:4px 10px 10px}
+.nav h6{margin:14px 10px 5px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;padding:9px 11px;border-radius:10px;cursor:pointer;color:var(--ink2);font-weight:550;text-align:left}
+.nav button:hover{background:var(--gll)}
+.nav button.on{background:var(--gl);color:var(--g2);font-weight:700}
+.nav button.on svg{color:var(--g)}
+.nav .cnt{margin-left:auto;font-size:11.5px;font-weight:700;background:var(--line2);color:var(--muted);border-radius:20px;padding:1px 8px}
+.nav .cnt.warn{background:var(--goldl);color:#8a5a00}.nav .cnt.bad{background:var(--redl);color:var(--red)}
+[data-theme=dark] .nav .cnt.warn{color:var(--gold)}
+.side-foot{border-top:1px solid var(--line);padding:10px 14px;font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center;justify-content:space-between}
+.main{flex:1;margin-left:var(--side);min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;height:60px;display:flex;align-items:center;gap:10px;padding:0 26px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top h1{font-size:17px;margin:0;font-weight:700;flex:1}
+.iconbtn.burger{display:none}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink2)}
+.iconbtn:hover{border-color:var(--g);color:var(--g)}
+.demo-bar{background:repeating-linear-gradient(135deg,#f0a500 0 14px,#f4b528 14px 28px);color:#3b2a00;font-weight:700;font-size:13px;text-align:center;padding:5px}
+.content{padding:24px 26px 60px;max-width:1360px;width:100%}
+.head{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+.head h2{margin:0;font-size:27px;letter-spacing:-.02em;line-height:1.15}
+.head p{margin:4px 0 0;color:var(--muted);max-width:640px}
+.head .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--card);border-radius:11px;padding:8px 14px;font-weight:650;cursor:pointer;white-space:nowrap;color:var(--ink);text-decoration:none;font-size:14.5px}
+.btn:hover{border-color:var(--g)}
+.btn-p{background:var(--g);border-color:var(--g);color:#fff}
+.btn-p:hover{background:var(--g2);border-color:var(--g2)}
+[data-theme=dark] .btn-p{color:#06261a}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:#2e2100}
+.btn-red{color:var(--red)}.btn-red:hover{border-color:var(--red)}
+.btn-sm{padding:5px 10px;font-size:13px;border-radius:9px}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.pad{padding:18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi{padding:16px 18px;position:relative;overflow:hidden}
+.kpi .l{font-size:13px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.kpi .s{font-size:12.5px;color:var(--muted);margin-top:2px}
+.kpi .ic{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:10px;background:var(--gl);color:var(--g);display:grid;place-items:center}
+.kpi.gold .ic{background:var(--goldl);color:#b77d00}.kpi.red .ic{background:var(--redl);color:var(--red)}.kpi.blue .ic{background:var(--bluel);color:var(--blue)}
+.hero{background:linear-gradient(120deg,var(--g3),var(--g) 60%,#2a9a63);color:#fff;border-radius:18px;padding:22px 24px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:relative;overflow:hidden;margin-bottom:16px}
+.hero:after{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero h2{margin:0;font-size:24px}.hero p{margin:4px 0 0;opacity:.85}
+.hero .btn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#fff}
+.hero .btn:hover{background:rgba(255,255,255,.22)}
+[data-theme=dark] .hero{background:linear-gradient(120deg,#0c3a25,#14603e 60%,#1a7a4f)}
+.sec-t{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.sec-t h3{margin:0;font-size:16px}
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line2)}
+.li:first-child{border-top:0}
+.li .grow{flex:1;min-width:0}
+.li b{font-weight:650}
+.av{width:36px;height:36px;border-radius:50%;background:var(--gl);color:var(--g2);display:grid;place-items:center;font-weight:750;font-size:13px;flex:none;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.gold{background:var(--goldl);color:#9a6700}.av.blue{background:var(--bluel);color:var(--blue)}.av.red{background:var(--redl);color:var(--red)}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.search{position:relative;flex:1;min-width:220px;max-width:360px}
+.search input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink2)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.chip i{font-style:normal;opacity:.6;margin-left:3px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:12.5px;color:var(--muted);font-weight:650;text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--gll);white-space:nowrap}
+.tbl td{padding:11px 14px;border-top:1px solid var(--line2);vertical-align:middle}
+.tbl tr:first-child td{border-top:0}
+.tbl tbody tr:hover td{background:var(--gll)}
+.tbl tr.click{cursor:pointer}
+.tbl .sub{display:block;font-size:12.5px;color:var(--muted)}
+.tbl-wrap{overflow:auto;border-radius:var(--r)}
+.tbl tfoot td{font-weight:750;border-top:2px solid var(--line);background:var(--gll)}
+.pill{display:inline-block;border-radius:20px;padding:2px 9px;font-size:12px;font-weight:700;background:var(--line2);color:var(--ink2);white-space:nowrap}
+.pill.g{background:var(--gl);color:var(--g2)}.pill.gold{background:var(--goldl);color:#8a5a00}.pill.red{background:var(--redl);color:var(--red)}.pill.blue{background:var(--bluel);color:var(--blue)}
+[data-theme=dark] .pill.gold{color:var(--gold)}
+.amt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos{color:var(--g)}.neg{color:var(--red)}
+.rowacts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.menu-wrap{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 4px);background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:5px;min-width:220px;z-index:40}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 11px;border-radius:8px;cursor:pointer;font-weight:550}
+.menu button:hover{background:var(--gll)}
+.menu button.red{color:var(--red)}
+.modal-bg{position:fixed;inset:0;background:rgba(12,28,20,.45);display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;z-index:60;overflow:auto}
+.modal{background:var(--card);border-radius:18px;width:100%;max-width:640px;box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column;max-height:92vh}
+.modal.wide{max-width:900px}.modal.xwide{max-width:1100px}
+.modal-h{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-h h3{margin:0;flex:1;font-size:19px}
+.modal-b{padding:20px 22px;overflow:auto}
+.modal-f{display:flex;gap:8px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--line);flex-wrap:wrap}
+.modal-f .l{margin-right:auto}
+.fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.fg.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label{font-size:13px;font-weight:650;color:var(--ink2)}
+.f label .req{color:var(--red)}
+.f input,.f select,.f textarea{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--card);width:100%;min-width:0}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid color-mix(in srgb,var(--g) 35%,transparent);border-color:var(--g)}
+.f textarea{min-height:80px;resize:vertical}
+.f .hint{font-size:12px;color:var(--muted)}
+.f .err{font-size:12px;color:var(--red)}
+.f.check{flex-direction:row;align-items:center;gap:9px}
+.f.check input{width:18px;height:18px;accent-color:var(--g)}
+.f.check label{font-weight:550}
+.fsec{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g);margin-top:8px;padding-top:10px;border-top:1px solid var(--line2)}
+.fsec:first-child{margin-top:0;padding-top:0;border-top:0}
+.note{background:var(--gll);border:1px solid var(--gl);border-radius:12px;padding:11px 14px;font-size:13.5px;color:var(--ink2)}
+.note.gold{background:var(--goldl);border-color:#f6dc9a;color:#5c4200}
+.note.red{background:var(--redl);border-color:#f3c3be;color:#7a1c15}
+[data-theme=dark] .note.gold{color:var(--gold);border-color:#5a4615}[data-theme=dark] .note.red{color:var(--red);border-color:#5a2520}
+.toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--ink);color:var(--card);padding:11px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2);font-weight:550;max-width:min(560px,92vw);display:flex;gap:12px;align-items:center}
+.toast.err{background:var(--red);color:#fff}
+.toast button{background:none;border:0;color:var(--gold);font-weight:800;cursor:pointer}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow:auto}
+.tabs button{border:0;background:none;padding:9px 14px;font-weight:650;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--g2);border-bottom-color:var(--g)}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:14px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cal .dh{background:var(--gll);font-size:12px;font-weight:700;color:var(--muted);padding:8px;text-align:center}
+.cal .d{background:var(--card);min-height:96px;padding:6px;cursor:pointer;font-size:13px}
+.cal .d.o{background:var(--bg);color:var(--muted)}
+.cal .d.t .n{background:var(--g);color:#fff;border-radius:50%;width:24px;height:24px;display:grid;place-items:center}
+.cal .n{font-weight:700;width:24px;height:24px;display:grid;place-items:center}
+.cal .ev{display:block;font-size:11.5px;border-radius:6px;padding:2px 5px;margin-top:3px;background:var(--gl);color:var(--g2);font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:0;width:100%;text-align:left;cursor:pointer}
+.cal .ev.gold{background:var(--goldl);color:#8a5a00}.cal .ev.blue{background:var(--bluel);color:var(--blue)}.cal .ev.red{background:var(--redl);color:var(--red)}
+.bar{height:8px;background:var(--line2);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--g);border-radius:8px}
+.bar.gold i{background:var(--gold)}.bar.red i{background:var(--red)}
+.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.att label{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:8px 10px;cursor:pointer;font-weight:550}
+.att label:has(input:checked){background:var(--gl);border-color:var(--g)}
+.att input{width:18px;height:18px;accent-color:var(--g)}
+.photo-box{display:flex;gap:12px;align-items:center}
+.photo-box .av{width:64px;height:64px;font-size:20px}
+.sig{border:1.5px dashed var(--line);border-radius:12px;background:#fff;width:100%;height:150px;touch-action:none}
+.agenda-item{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--gll)}
+.agenda-item h4{margin:0 0 8px;font-size:15px}
+.vote{display:grid;grid-template-columns:repeat(3,1fr) 1.3fr;gap:8px;margin-top:8px}
+.vote input,.vote select{border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:var(--card);width:100%}
+.chart{width:100%;height:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.ob{max-width:620px;margin:6vh auto;padding:0 16px}
+.ob .card{padding:28px}
+.ob h1{margin:0 0 6px;font-size:28px;letter-spacing:-.02em}
+.steps{display:flex;gap:6px;margin:0 0 18px}.steps i{flex:1;height:5px;border-radius:5px;background:var(--line)}.steps i.on{background:var(--g)}
+.scrim{display:none}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  .side{transform:translateX(-102%);box-shadow:0 0 40px rgba(0,0,0,.2)}
+  body.nav-open .side{transform:none}
+  body.nav-open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:25}
+  .main{margin-left:0}.iconbtn.burger{display:grid}
+  .top{padding:0 14px}.content{padding:16px 14px 70px}
+  .g2,.g3{grid-template-columns:minmax(0,1fr)}
+  .fg,.fg.c3{grid-template-columns:minmax(0,1fr)}
+  .head h2{font-size:23px}
+  .tbl .hm{display:none}
+  .kv{grid-template-columns:110px 1fr}
+  .cal .d{min-height:62px;padding:4px}.cal .ev{font-size:10px;padding:1px 3px}
+  .vote{grid-template-columns:repeat(3,1fr)}.vote select{grid-column:1/-1}
+}
+@media (max-width:520px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi .v{font-size:21px}.modal-bg{padding:0}.modal{border-radius:0;max-height:100vh;min-height:100vh}}
+.daynav{display:flex;gap:6px;margin-top:10px}.daynav .btn{min-width:34px}
+.okb{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}.okb.on{background:var(--ok);border-color:var(--ok);color:#fff}.okb svg{width:14px;height:14px}
+.tick{width:19px;height:19px;accent-color:var(--g);cursor:pointer}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}.dot.red{background:var(--red)}.dot.gold{background:var(--gold)}.dot.g{background:var(--ok)}
+/* ---------- ZackImker: Honig-Thema ---------- */
+:root{--g:#c98a0b;--g2:#a86f05;--g3:#6b4210;--gl:#fdf1d6;--gll:#fff9ec;--gold:#e0702a;--goldl:#fde9dc;--red:#c0392b;--redl:#fdecea;--blue:#2d6cdf;--bluel:#e7eefb;--ok:#3d8b37;--okl:#e6f4e3;--ink:#2a1f10;--ink2:#4a3a22;--muted:#7d6e58;--bg:#faf6ee;--line:#ece3d2;--line2:#f4eee2}
+[data-theme=dark]{--g:#f3b53a;--g2:#f8c968;--g3:#fde2a6;--gl:#3a2a0e;--gll:#2b200c;--gold:#ff9a5a;--goldl:#3a2414;--red:#ff7a70;--redl:#3c1d1a;--ok:#7ccf72;--okl:#16301a;--bg:#16120c;--card:#211a11;--line:#3a2f1e;--line2:#2b2316;--ink:#f6ecda;--ink2:#e0d1b6;--muted:#a8977a}
+.side{background:#3a2508 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48' viewBox='0 0 28 48'%3E%3Cpath d='M14 0l14 8v16l-14 8L0 24V8zM14 32l14 8v16M14 32L0 40v16' fill='none' stroke='%23ffffff' stroke-opacity='.04'/%3E%3C/svg%3E");border-right:0;color:#f6ecda}
+.side .brand span,.side .nav h6,.side-foot{color:#c9b58f}.side-foot{border-top-color:#523612}
+.side .nav button{color:#f0e2c4}.side .nav button:hover{background:#4d330e}
+.side .nav button.on{background:#e3a11b;color:#2a1a04}.side .nav button.on svg{color:#2a1a04}
+.side .nav .cnt{background:#5a3d13;color:#f0e2c4}.side .nav .cnt.warn{background:#e0702a;color:#fff}.side .nav .cnt.bad{background:#fff;color:#c0392b}
+.side .nav button.on .cnt{background:rgba(0,0,0,.18);color:#2a1a04}
+.side .iconbtn{background:#4d330e;border-color:#5a3d13;color:#f0e2c4}
+.side .brand{border-bottom:3px solid #e3a11b}
+.crest{background:transparent;box-shadow:none}
+.pill.g{background:var(--okl);color:var(--ok)}.pos{color:var(--ok)}
+.chip.on{background:var(--g3);border-color:var(--g3);color:#fff}
+.btn-p{color:#2a1a04}.btn-p:hover{color:#2a1a04}
+.ihero{background:linear-gradient(150deg,#6b4210 0%,#b97a08 50%,#f0b43a 100%);align-items:stretch;padding-bottom:28px}
+.ihero::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='96' viewBox='0 0 56 96'%3E%3Cpath d='M28 0l28 16v32L28 64 0 48V16zM28 64l28 16v32M28 64L0 80v32' fill='none' stroke='%23ffffff' stroke-opacity='.12' stroke-width='1.5'/%3E%3C/svg%3E");pointer-events:none}
+.ihero::after{right:-30px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,240,180,.45),transparent 65%)}
+.ihero>*{position:relative;z-index:1}
+.beetip{margin-top:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:9px 12px;font-size:13.5px;max-width:520px;line-height:1.45}
+.hexgrid{display:flex;flex-wrap:wrap;gap:6px 4px;padding-left:4px}
+.hex{width:74px;height:84px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,#f6c344,#e3a11b);border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#2a1a04;font:inherit;transition:transform .12s}
+.hex:hover{transform:scale(1.06)}.hex b{font-size:19px;line-height:1}.hex small{font-size:9.5px;opacity:.8;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hex.warn{background:linear-gradient(160deg,#ffd9b0,#f08a3c)}.hex.bad{background:linear-gradient(160deg,#ff9b8f,#d6443a);color:#fff}
+.qdot{display:inline-block;width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(0,0,0,.35);vertical-align:-1px}
+.q-blau{background:#2d6cdf}.q-weiß{background:#fff}.q-gelb{background:#f5d000}.q-rot{background:#d63a2f}.q-grün{background:#2f9e44}
+.scard{border-left:5px solid var(--g)}
+.daynav{display:flex;gap:6px;margin-top:10px}
+.ready{display:flex;gap:10px;flex-wrap:wrap}
+.ready>div{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 14px;min-width:128px}
+.ready span{display:flex;gap:6px;align-items:center;font-size:12.5px;opacity:.9}.ready span svg{width:15px;height:15px}
+.ready b{display:block;font-size:28px;line-height:1.15;font-variant-numeric:tabular-nums}.ready i{font-style:normal;font-size:12px;opacity:.8}
+.ready .lo b{color:#ffd24a}.ready .bad b{color:#fff;text-decoration:underline wavy #ffd24a}
+.amp{display:inline-flex;gap:3px;vertical-align:middle}.amp i{width:12px;height:12px;border-radius:50%;background:var(--line);display:block}
+.amp.red i:nth-child(1){background:#d81e2c}.amp.gold i:nth-child(2){background:#f2b200}.amp.g i:nth-child(3){background:#1f8a4c}
+.agtc{font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}.agtc.red{color:var(--red);font-weight:700}.agtc.gold{color:#9a6a00;font-weight:700}[data-theme=dark] .agtc.gold{color:var(--gold)}
+.vehc{border-left:6px solid var(--ok)}.vehc.eg{border-left-color:var(--gold)}.vehc.ad{border-left-color:var(--red)}
+.vehc h3{margin:0;font-size:16.5px}.vehc .rn{font-size:12.5px;color:var(--muted)}
+.vehc .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.mcard{cursor:pointer;transition:transform .12s}.mcard:hover{transform:translateY(-2px);border-color:var(--g)}
+.dt{width:52px;height:56px;border-radius:12px;background:var(--gl);color:var(--g2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.dt b{font-size:22px;line-height:1}.dt span{font-size:11px;font-weight:700;text-transform:uppercase}
+.dt.past{background:var(--line2);color:var(--muted)}
+.statbar{display:flex;gap:10px;align-items:center;margin:7px 0;font-size:14px}.statbar span{width:200px;flex:none}.statbar .bar{flex:1;height:12px}.statbar b{width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.attgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.attgrid label{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:7px 10px;cursor:pointer;font-size:14px}
+.attgrid label.on{border-color:var(--ok);background:var(--okl)}.attgrid label.ex{border-color:var(--gold);background:var(--goldl)}
+.attgrid label small{margin-left:auto;color:var(--muted);font-size:11.5px}
+@media (max-width:860px){.statbar span{width:130px}}
+@media (max-width:520px){.ready{display:grid;grid-template-columns:1fr 1fr;width:100%}.ready b{font-size:23px}.ihero{padding:18px 16px 30px}}
+.warnc{color:#9a6a00;font-weight:700}[data-theme=dark] .warnc{color:var(--gold)}
+[data-theme=dark] .btn-p,[data-theme=dark] .chip.on{color:#fff}[data-theme=dark] .btn-p{background:#d99410;border-color:#d99410}
+</style>
+</head>
+<body>
+<noscript>Bitte JavaScript einschalten – ZackImker läuft komplett im Browser.</noscript>
+<script>window.__ZI_DEMO__=true;</script>
+<script>'use strict';
+/* =========================================================
+   ZackImker – die App für Imkerinnen und Imker. Eine Datei, offline, ohne Abo.
+   ========================================================= */
+const IS_DEMO = !!window.__ZI_DEMO__;
+const APPNAME = 'ZackImker';
+const VERSION = '1.0';
+const DB_NAME = 'zackimker' + (IS_DEMO ? '-demo' : '');
+const LS_PREFIX = 'zi' + (IS_DEMO ? 'x' : '') + '_';
+
+/* ---------- Kleine Helfer ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const r2 = n => Math.round((Number(n) || 0) * 100 + Number.EPSILON * 100) / 100;
+const num = v => { if (typeof v === 'number') return v; const s = String(v ?? '').trim().replace(/\s/g, ''); if (!s) return 0; const n = Number(s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : s); return isFinite(n) ? n : 0; };
+const fmtMoney = n => (Number(n) || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+const fmtNum = (n, d = 0) => (Number(n) || 0).toLocaleString('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d });
+const pad2 = n => String(n).padStart(2, '0');
+const isoDate = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => isoDate(new Date());
+const parseD = s => { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+const addDays = (s, n) => { const d = parseD(s); d.setDate(d.getDate() + n); return isoDate(d); };
+const addMonths = (s, n) => { const d = parseD(s), day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); d.setDate(Math.min(day, last)); return isoDate(d); };
+const daysBetween = (a, b) => Math.round((parseD(b) - parseD(a)) / 86400000);
+const fmtDate = s => { if (!s) return ''; const [y, m, d] = String(s).split('-'); return d ? `${d}.${m}.${y}` : s; };
+const fmtDateLong = s => s ? parseD(s).toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+const MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+const WD = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const yearOf = s => Number(String(s || '').slice(0, 4)) || 0;
+const plural = (n, a, b) => `${fmtNum(n)} ${n === 1 ? a : b}`;
+const initials = s => String(s || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+const ageOn = (birth, on = today()) => { if (!birth) return null; const b = parseD(birth), o = parseD(on); let a = o.getFullYear() - b.getFullYear(); if (o.getMonth() < b.getMonth() || (o.getMonth() === b.getMonth() && o.getDate() < b.getDate())) a--; return a; };
+const sum = (arr, f = x => x) => r2(arr.reduce((s, x) => s + (Number(f(x)) || 0), 0));
+const byId = (col, id) => (data[col] || []).find(x => String(x.id) === String(id));
+const nowHM = () => { const d = new Date(); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+/* ---------- IBAN / Gläubiger-ID ---------- */
+const cleanIban = s => String(s || '').replace(/\s+/g, '').toUpperCase();
+function mod97(s) { let r = 0; for (const ch of s) { const v = /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch; for (const c of v) r = (r * 10 + Number(c)) % 97; } return r; }
+function ibanOk(s) { const i = cleanIban(s); if (!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(i)) return false; if (i.startsWith('DE') && i.length !== 22) return false; return mod97(i.slice(4) + i.slice(0, 4)) === 1; }
+const fmtIban = s => cleanIban(s).replace(/(.{4})/g, '$1 ').trim();
+function credIdOk(s) { const c = cleanIban(s); if (!/^[A-Z]{2}\d{2}[A-Z0-9]{3}[A-Z0-9]{1,28}$/.test(c)) return false; return mod97(c.slice(7) + c.slice(0, 4)) === 1; }
+
+/* ---------- Icons ---------- */
+const ICON = {
+  map: '<path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+  play: '<path d="M7 4.5v15l12-7.5z"/>',
+  trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4.5a3 3 0 0 0 3.5 4M16 6h3.5a3 3 0 0 1-3.5 4M12 13v4M8.5 20.5h7M9.5 17h5v3.5h-5z"/>',
+  book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/>',
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M16.5 14.6c2.6.2 4.4 1.9 5 4.9"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5"/>',
+  euro: '<path d="M17.5 6.5A7 7 0 1 0 17.5 17.5"/><path d="M4 10h10M4 14h10"/>',
+  bank: '<path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/>',
+  gift: '<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20"/><path d="M12 8.5C9 8.5 7 7.4 7 5.8 7 4.6 8 4 9 4c2 0 3 2.6 3 4.5Zm0 0c3 0 5-1.1 5-2.7C17 4.6 16 4 15 4c-2 0-3 2.6-3 4.5Z"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  clipboard: '<rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 4.5V3.5h6v1"/><path d="M8.5 10h7M8.5 14h7M8.5 18h4"/>',
+  gavel: '<path d="m14.5 4.5 5 5M12 7l5 5M10.5 8.5l-6.8 6.8a1.8 1.8 0 0 0 2.5 2.5L13 11"/><path d="M13 21h8"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+  edit: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  print: '<path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v6.5H7z"/>',
+  moon: '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>', alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.1"/>',
+  download: '<path d="M12 4v11M7 10.5l5 5 5-5M4.5 20h15"/>', upload: '<path d="M12 16V5M7 9.5l5-5 5 5M4.5 20h15"/>',
+  award: '<circle cx="12" cy="9" r="5.5"/><path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7"/>', cake: '<path d="M4 20h16v-7.5H4z"/><path d="M4 16c2 1.2 4 1.2 6 0s4-1.2 6 0 3 1 4 0"/><path d="M12 12.5V8M12 5.5v.1"/>',
+  layers: '<path d="M12 3 2.5 8 12 13l9.5-5z"/><path d="m2.5 12.5 9.5 5 9.5-5M2.5 17l9.5 5 9.5-5"/>', more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  file: '<path d="M14 3.5H7A2 2 0 0 0 5 5.5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10z"/><path d="M14 3.5v5h5"/>', sepa: '<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/>',
+  star: '<path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/>', shield: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/>',
+  sync: '<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12A8 8 0 0 1 18.3 7.1"/><path d="M18.5 3v4.5H14M5.5 21v-4.5H10"/>', key: '<circle cx="8" cy="15" r="4.5"/><path d="m11.2 11.8 8.3-8.3M16 7l3 3M14 9l2 2"/>',
+  arrowr: '<path d="M5 12h14M13 6l6 6-6 6"/>', info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.1"/>', camera: '<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'
+};
+const svg = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n] || ''}</svg>`;
+
+/* ---------- Speicher (IndexedDB, Notfall localStorage) ---------- */
+const store = (() => {
+  let dbp = null, mode = 'idb';
+  const open = () => dbp || (dbp = new Promise((res, rej) => {
+    if (!window.indexedDB) return rej(new Error('kein IndexedDB'));
+    let q; try { q = indexedDB.open(DB_NAME, 1); } catch (e) { return rej(e); }
+    q.onupgradeneeded = () => q.result.createObjectStore('kv');
+    q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); q.onblocked = () => rej(new Error('blockiert'));
+  }));
+  const tx = async (m, fn) => { const db = await open(); return new Promise((res, rej) => { const t = db.transaction('kv', m); const out = fn(t.objectStore('kv')); t.oncomplete = () => res(typeof out === 'function' ? out() : out); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); }); };
+  return {
+    get mode() { return mode; },
+    async init() { try { await open(); await tx('readonly', s => { s.count(); }); } catch (e) { mode = 'ls'; } return mode; },
+    async get(k) { if (mode === 'ls') { try { const v = localStorage.getItem(LS_PREFIX + k); return v ? JSON.parse(v) : undefined; } catch (e) { return undefined; } } return tx('readonly', s => { let r; const q = s.get(k); q.onsuccess = () => { r = q.result; }; return () => r; }); },
+    async set(k, v) { if (mode === 'ls') { localStorage.setItem(LS_PREFIX + k, JSON.stringify(v)); return; } return tx('readwrite', s => { s.put(v, k); }); },
+    async del(k) { if (mode === 'ls') { localStorage.removeItem(LS_PREFIX + k); return; } return tx('readwrite', s => { s.delete(k); }); },
+    async keys() { if (mode === 'ls') return Object.keys(localStorage).filter(k => k.startsWith(LS_PREFIX)).map(k => k.slice(LS_PREFIX.length)); return tx('readonly', s => { let r = []; const q = s.getAllKeys(); q.onsuccess = () => { r = q.result.map(String); }; return () => r; }); },
+    async clear() { if (mode === 'ls') { Object.keys(localStorage).filter(k => k.startsWith(LS_PREFIX)).forEach(k => localStorage.removeItem(k)); return; } return tx('readwrite', s => { s.clear(); }); }
+  };
+})();
+
+/* ---------- Fotos (getrennt gespeichert, damit die Hauptdaten klein bleiben) ---------- */
+const photoCache = new Map();
+const photoSrc = ref => !ref ? '' : String(ref).startsWith('data:') ? ref : (photoCache.get(ref) || (ref === 'ph_demomap' && typeof demoMap === 'function' ? demoMap() : ''));
+async function loadPhotos() { const ks = (await store.keys()).filter(k => k.startsWith('ph_')); for (const k of ks) photoCache.set(k, await store.get(k)); }
+async function savePhoto(dataUrl) { const k = 'ph_' + pid(); await store.set(k, dataUrl); photoCache.set(k, dataUrl); return k; }
+async function delPhoto(k) { if (!k || !String(k).startsWith('ph_')) return; await store.del(k); photoCache.delete(k); }
+function shrinkImage(file, max = 1280, q = 0.82) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => { const im = new Image(); im.onload = () => { const s = Math.min(1, max / Math.max(im.width, im.height)); const c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', q)); }; im.onerror = rej; im.src = fr.result; };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+function pickFile(accept, capture) {
+  return new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = accept; if (capture) i.capture = 'environment'; i.onchange = () => res(i.files[0] || null); i.click(); });
+}
+
+/* ---------- Datenmodell ---------- */
+const COLLECTIONS = ['stands', 'colonies', 'inspections', 'mites', 'treatments', 'feedings', 'moves', 'harvests', 'batches', 'sales', 'members', 'bookings', 'tasks'];
+const HIVES = ['Zander', 'Deutsch Normalmaß', 'Dadant', 'Langstroth', 'Segeberger', 'Mini-Plus', 'Warré', 'Top-Bar', 'Sonstige'];
+const RACES = ['Carnica', 'Buckfast', 'Mellifera (Dunkle Biene)', 'Ligustica', 'Hybrid / unbekannt'];
+const ORIGINS = ['Ableger', 'Schwarm', 'Kunstschwarm', 'Gekauft', 'Vereinigt', 'Sonstiges'];
+const COL_END = ['Aufgelöst / vereinigt', 'Eingegangen (Winterverlust)', 'Verkauft', 'Abgeschwärmt', 'Sonstiges'];
+const SORTS = ['Frühtracht', 'Rapshonig', 'Blütenhonig', 'Sommertracht', 'Lindenhonig', 'Robinienhonig (Akazie)', 'Kornblumenhonig', 'Heidehonig', 'Waldhonig', 'Kastanienhonig', 'Sonstiger'];
+const DRUGS = [['Oxalsäure (Träufeln/Sprühen)', 'Oxalsäuredihydrat'], ['Oxalsäure (Verdampfen)', 'Oxalsäuredihydrat'], ['Ameisensäure 60 %', 'Ameisensäure'], ['Ameisensäure 85 %', 'Ameisensäure'], ['Milchsäure 15 %', 'Milchsäure'], ['Thymol-Präparat', 'Thymol'], ['Sonstiges', '']];
+const MITE_METHODS = ['Gemülldiagnose (Windel)', 'Puderzuckermethode', 'Auswaschmethode', 'Drohnenbrut-Kontrolle'];
+const FEED_KINDS = ['Zuckerwasser 3:2', 'Zuckerwasser 1:1', 'Futtersirup', 'Futterteig', 'Honig (eigener)'];
+const BOOK_CATS_IN = ['Honigverkauf', 'Wachs / Mittelwände', 'Ableger / Königinnen', 'Bestäubung', 'Sonstiges'];
+const BOOK_CATS_OUT = ['Gläser & Deckel', 'Etiketten', 'Futter / Zucker', 'Varroa-Mittel', 'Beuten & Material', 'Königinnen / Völker', 'Mittelwände', 'Beiträge (Verein, Tierseuchenkasse)', 'Versicherung', 'Fahrtkosten / Wanderung', 'Sonstiges'];
+const QUEEN_COLORS = ['blau', 'weiß', 'gelb', 'rot', 'grün']; /* Jahresendziffer 0/5 blau, 1/6 weiß, 2/7 gelb, 3/8 rot, 4/9 grün */
+const queenColor = y => y ? QUEEN_COLORS[Number(y) % 5] : '';
+
+function freshData() {
+  return {
+    meta: { created: today(), version: VERSION, setupDone: false, lastBackup: '', device: { name: '', code: '' }, theme: '' },
+    club: { name: '', owner: '', street: '', zip: '', city: '', email: '', phone: '', web: '', state: 'Niedersachsen', logo: '', iban: '', bic: '', bank: '', register: '', vetOffice: '', association: '' },
+    settings: { mhdMonths: 24, origin: 'Deutschland', storage: 'Trocken und nicht über 20 °C lagern.', inspectDays: 9, miteLimit: 10, warnDays: 21, backupDays: 14, cashStart: 0, lowStock: 20, price500: 7, price250: 4.5, price30: 1.5 },
+    stands: [], colonies: [], inspections: [], mites: [], treatments: [], feedings: [], moves: [], harvests: [], batches: [], sales: [], members: [], bookings: [], tasks: []
+  };
+}
+let data = freshData();
+
+function normalize(d) {
+  const f = freshData();
+  d = d && typeof d === 'object' ? d : f;
+  d.meta = { ...f.meta, ...(d.meta || {}) }; d.meta.device = { ...f.meta.device, ...(d.meta.device || {}) };
+  d.club = { ...f.club, ...(d.club || {}) };
+  d.settings = { ...f.settings, ...(d.settings || {}) };
+  COLLECTIONS.forEach(c => { if (!Array.isArray(d[c])) d[c] = []; });
+  ['treatments', 'feedings', 'moves', 'harvests'].forEach(c => d[c].forEach(x => { x.colonies = Array.isArray(x.colonies) ? x.colonies : []; }));
+  d.batches.forEach(x => { x.harvests = Array.isArray(x.harvests) ? x.harvests : []; });
+  return d;
+}
+
+let saveTimer = null, saving = Promise.resolve();
+function save() {
+  data.meta.updated = new Date().toISOString();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { saving = store.set('data', data).catch(e => toast('Speichern fehlgeschlagen: ' + e.message, { err: true })); }, 120);
+}
+async function flushSave() { clearTimeout(saveTimer); await store.set('data', data); }
+const touch = x => { x.updatedAt = new Date().toISOString(); return x; };
+function upsert(col, x) { touch(x); const i = data[col].findIndex(y => String(y.id) === String(x.id)); if (i >= 0) data[col][i] = x; else data[col].push(x); save(); return x; }
+function removeFrom(col, id) { data[col] = data[col].filter(x => String(x.id) !== String(id)); (data.meta.deleted ||= []).push({ col, id: String(id), at: new Date().toISOString() }); save(); }
+
+/* ---------- Nummern ---------- */
+function nextNo(col, prefix, field = 'no') {
+  const y = new Date().getFullYear(), dev = data.meta.device.code ? data.meta.device.code + '-' : '';
+  const re = new RegExp(`^${prefix}-${dev}${y}-(\\d+)$`);
+  const max = data[col].reduce((m, x) => { const r = re.exec(x[field] || ''); return r ? Math.max(m, Number(r[1])) : m; }, 0);
+  return `${prefix}-${dev}${y}-${String(max + 1).padStart(3, '0')}`;
+}
+
+/* ---------- Mitglieder-Helfer ---------- */
+const fullName = m => m ? [m.first, m.last].filter(Boolean).join(' ') || m.name || '–' : '–';
+const sortName = m => `${m.last || ''} ${m.first || ''}`.toLowerCase();
+const memberById = id => byId('members', id);
+const memberLabel = id => { const m = memberById(id); return m ? fullName(m) : ''; };
+const activeMembers = () => data.members.filter(m => m.dept !== 'Ausgetreten');
+function addressLines(m) { return [fullName(m), m.street, [m.zip, m.city].filter(Boolean).join(' ')].filter(Boolean); }
+
+/* ---------- Kasse ---------- */
+const bookingAmount = b => b.type === 'out' ? -Math.abs(b.amount) : Math.abs(b.amount);
+/* ---------- Oberfläche: Toast, Modal, Menü ---------- */
+function toast(msg, { err = false, ms = 3800, action = null } = {}) {
+  let root = $('#toasts'); if (!root) { root = document.createElement('div'); root.id = 'toasts'; root.className = 'toasts'; document.body.appendChild(root); }
+  const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role', 'status');
+  t.innerHTML = `<span>${esc(msg)}</span>`;
+  if (action) { const b = document.createElement('button'); b.textContent = action.label; b.onclick = () => { action.fn(); t.remove(); }; t.appendChild(b); }
+  root.appendChild(t); setTimeout(() => t.remove(), ms);
+}
+const modalStack = [];
+function openModal({ title, body, foot = '', wide = false, xwide = false, onOpen, onClose }) {
+  const bg = document.createElement('div'); bg.className = 'modal-bg';
+  bg.innerHTML = `<div class="modal${wide ? ' wide' : ''}${xwide ? ' xwide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(String(title).replace(/<[^>]+>/g, ''))}">
+    <div class="modal-h"><h3>${title}</h3><button class="iconbtn" data-close aria-label="Schließen">${svg('x')}</button></div>
+    <div class="modal-b">${body}</div>${foot ? `<div class="modal-f">${foot}</div>` : ''}</div>`;
+  document.body.appendChild(bg);
+  const entry = { bg, onClose }; modalStack.push(entry);
+  bg.addEventListener('mousedown', e => { if (e.target === bg) entry.down = true; });
+  bg.addEventListener('click', e => { if (e.target === bg && entry.down) closeModal(); entry.down = false; if (e.target.closest('[data-close]')) closeModal(); });
+  const first = bg.querySelector('input:not([type=hidden]):not([type=checkbox]),select,textarea'); if (first && !('ontouchstart' in window)) setTimeout(() => first.focus(), 30);
+  onOpen && onOpen(bg.querySelector('.modal'));
+  return bg.querySelector('.modal');
+}
+function closeModal() { const e = modalStack.pop(); if (!e) return; e.bg.remove(); e.onClose && e.onClose(); }
+const topModal = () => modalStack.length ? modalStack[modalStack.length - 1].bg.querySelector('.modal') : null;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('.menu')) closeMenus(); else if (modalStack.length) closeModal(); } });
+function closeMenus() { $$('.menu').forEach(m => m.remove()); }
+function openMenu(btn, items) {
+  closeMenus();
+  const m = document.createElement('div'); m.className = 'menu';
+  m.innerHTML = items.filter(Boolean).map(([act, label, cls]) => `<button data-act="${esc(act)}" class="${cls || ''}">${label}</button>`).join('');
+  btn.parentElement.appendChild(m);
+  const r = m.getBoundingClientRect(); if (r.bottom > innerHeight - 8) { m.style.top = 'auto'; m.style.bottom = 'calc(100% + 4px)'; }
+}
+document.addEventListener('click', e => { if (!e.target.closest('.menu-wrap')) closeMenus(); });
+function confirmBox(text, okLabel = 'Ja', danger = false) {
+  return new Promise(res => {
+    let done = false;
+    openModal({ title: 'Bitte bestätigen', body: `<p style="margin:0">${text}</p>`, foot: `<button class="btn" data-close>Abbrechen</button><button class="btn ${danger ? 'btn-red' : 'btn-p'}" id="cfOk">${esc(okLabel)}</button>`,
+      onOpen: m => { m.querySelector('#cfOk').onclick = () => { done = true; closeModal(); res(true); }; }, onClose: () => { if (!done) res(false); } });
+  });
+}
+
+/* ---------- Drucken ---------- */
+const PRINT_CSS = `@page{size:A4;margin:16mm 16mm 18mm 20mm}*{box-sizing:border-box}body{font:10.5pt/1.45 system-ui,"Segoe UI",Arial,sans-serif;color:#111;margin:0}
+h1{font-size:17pt;margin:0 0 4mm;color:#6b4210}h2{font-size:12.5pt;margin:6mm 0 2mm;color:#6b4210}h3{font-size:11pt;margin:4mm 0 1.5mm}
+table{width:100%;border-collapse:collapse;margin:2mm 0}th,td{text-align:left;padding:1.6mm 2mm;border-bottom:.3mm solid #ccc;vertical-align:top}th{background:#fdf3dc;font-size:9pt}
+td.r,th.r{text-align:right}tfoot td{font-weight:700;border-top:.5mm solid #333}.muted{color:#666}.small{font-size:8.5pt}
+.lh{display:flex;justify-content:space-between;align-items:flex-start;gap:8mm;border-bottom:.8mm solid #c98a0b;padding-bottom:3mm;margin-bottom:6mm}
+.lh .n{font-size:15pt;font-weight:800;color:#6b4210}.lh img{max-height:20mm;max-width:40mm}.lh .a{font-size:8.5pt;color:#555;text-align:right}
+.addr{margin:4mm 0 10mm;min-height:28mm}.addr .s{font-size:7.5pt;color:#666;border-bottom:.2mm solid #999;display:inline-block;margin-bottom:2mm}
+.sig{display:flex;gap:14mm;margin-top:16mm}.sig div{flex:1;border-top:.3mm solid #333;padding-top:1.5mm;font-size:8.5pt;color:#444}.sig img{display:block;max-height:16mm;margin-top:-18mm}
+.box{border:.4mm solid #c98a0b;border-radius:2mm;padding:3mm 4mm;margin:3mm 0}.pb{page-break-after:always}.foot{margin-top:8mm;font-size:8pt;color:#666;border-top:.2mm solid #ccc;padding-top:2mm}
+.right{text-align:right}.big{font-size:13pt;font-weight:800}.chk{display:inline-block;width:3.6mm;height:3.6mm;border:.3mm solid #333;margin-right:1.5mm;vertical-align:-.5mm;text-align:center;line-height:3.2mm;font-size:8pt}`;
+function printHTML(title, body) {
+  window.__lastPrint = { title, body };
+  const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  document.body.appendChild(f); const d = f.contentDocument;
+  d.open(); d.write(`<!doctype html><html lang="de"><head><meta charset="utf-8"><title>${esc(title)}</title><style>${PRINT_CSS}</style></head><body>${body}</body></html>`); d.close();
+  const fire = () => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch (e) {} setTimeout(() => f.remove(), 60000); };
+  Promise.all([...d.images].map(i => i.complete ? 1 : new Promise(r => { i.onload = i.onerror = r; }))).then(() => setTimeout(fire, 60));
+}
+function letterhead() {
+  const c = data.club, logo = photoSrc(c.logo);
+  return `<div class="lh"><div>${logo ? `<img src="${logo}" alt="">` : ''}<div class="n">${esc(c.name || 'Imkerei')}</div>${c.owner ? `<div class="small muted">${esc(c.owner)}</div>` : ''}</div>
+    <div class="a">${[c.street, [c.zip, c.city].filter(Boolean).join(' '), c.phone, c.email, c.web].filter(Boolean).map(esc).join('<br>')}${c.register ? '<br>' + esc(c.register) : ''}</div></div>`;
+}
+function addressBlock(m) { const c = data.club; return `<div class="addr"><span class="s">${esc([c.name, c.street, [c.zip, c.city].filter(Boolean).join(' ')].filter(Boolean).join(' · '))}</span><br>${addressLines(m).map(esc).join('<br>')}</div>`; }
+function clubFoot() { const c = data.club; return `<div class="foot">${esc(c.name)}${c.iban ? ' · IBAN ' + esc(fmtIban(c.iban)) : ''}${c.bic ? ' · BIC ' + esc(c.bic) : ''}${c.bank ? ' · ' + esc(c.bank) : ''}${c.creditorId ? ' · Gläubiger-ID ' + esc(c.creditorId) : ''}</div>`; }
+
+/* ---------- Dateien speichern ---------- */
+function downloadFile(name, content, type = 'application/octet-stream') {
+  const blob = content instanceof Blob ? content : new Blob([content], { type });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  window.__lastDownload = { name, size: blob.size };
+}
+const csvCell = v => { const s = String(v ?? ''); return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+function downloadCSV(name, rows) { downloadFile(name, '﻿' + rows.map(r => r.map(csvCell).join(';')).join('\r\n'), 'text/csv;charset=utf-8'); }
+const deMoney = n => fmtNum(n, 2);
+
+/* =========================================================
+   Formulare, Navigation, Seitengerüst
+   ========================================================= */
+const optList = o => (typeof o === 'function' ? o() : o || []).map(v => Array.isArray(v) ? v : [v, v]);
+const hunterOpts = (filter = m => m.dept !== 'Ausgetreten') => [['', '– bitte wählen –'], ...data.members.filter(filter).sort((a, b) => sortName(a).localeCompare(sortName(b))).map(m => [m.id, fullName(m)])];
+const standOpts = (empty = '– bitte wählen –') => [['', empty], ...data.stands.filter(w => !w.inactive).map(w => [w.id, w.name])];
+const colonyOpts = (all = false) => data.colonies.filter(c => all || !c.endDate).sort((a, b) => String(a.no).localeCompare(String(b.no), 'de', { numeric: true })).map(c => [c.id, colLabel(c)]);
+
+function fieldHTML(f, x) {
+  if (f.type === 'sec') return `<div class="fsec">${esc(f.label)}</div>`;
+  if (f.type === 'note') return `<div class="f full"><div class="note ${f.cls || ''}">${f.html}</div></div>`;
+  const id = 'f_' + f.k, v = x[f.k] ?? (f.def ?? ''), req = f.req ? ' required' : '';
+  const lab = `<label for="${id}">${esc(f.label)}${f.req ? ' <span class="req">*</span>' : ''}</label>`;
+  const hint = f.hint ? `<span class="hint">${f.hint}</span>` : '';
+  const ph = f.ph ? ` placeholder="${esc(f.ph)}"` : '';
+  const cls = 'f' + (f.full ? ' full' : '');
+  switch (f.type) {
+    case 'textarea': return `<div class="${cls}">${lab}<textarea id="${id}" name="${f.k}"${ph}${req}>${esc(v)}</textarea>${hint}</div>`;
+    case 'select': case 'member': {
+      const opts = f.type === 'member' ? hunterOpts(f.filter) : optList(f.opts);
+      return `<div class="${cls}">${lab}<select id="${id}" name="${f.k}"${req}>${opts.map(([ov, ol]) => `<option value="${esc(ov)}"${String(ov) === String(v) ? ' selected' : ''}>${esc(ol)}</option>`).join('')}</select>${hint}</div>`;
+    }
+    case 'check': return `<div class="f check${f.full ? ' full' : ''}"><input type="checkbox" id="${id}" name="${f.k}"${v ? ' checked' : ''}><label for="${id}">${esc(f.label)}</label>${hint}</div>`;
+    case 'multi': {
+      const opts = optList(f.opts), vals = (Array.isArray(v) ? v : []).map(String);
+      return `<div class="f full">${lab}<div class="chips" data-multi="${f.k}">${opts.length ? opts.map(([ov, ol]) => `<label class="chip${vals.includes(String(ov)) ? ' on' : ''}"><input type="checkbox" value="${esc(ov)}" ${vals.includes(String(ov)) ? 'checked' : ''} hidden>${esc(ol)}</label>`).join('') : '<span class="muted small">Noch nichts angelegt.</span>'}</div>${hint}</div>`;
+    }
+    case 'money': return `<div class="${cls}">${lab}<input id="${id}" name="${f.k}" inputmode="decimal" value="${v === '' ? '' : esc(fmtNum(v, 2))}"${ph}${req}>${hint}</div>`;
+    case 'number': return `<div class="${cls}">${lab}<input id="${id}" name="${f.k}" type="number" step="${f.step || 'any'}" value="${esc(v)}"${ph}${req}>${hint}</div>`;
+    case 'iban': return `<div class="${cls}">${lab}<input id="${id}" name="${f.k}" value="${esc(v ? fmtIban(v) : '')}" autocomplete="off" placeholder="DE00 0000 0000 0000 0000 00"${req}><span class="err hidden" data-err="${f.k}">Diese IBAN stimmt nicht – bitte prüfen.</span>${hint}</div>`;
+    case 'photo': return `<div class="f full">${lab}<div class="photo-box"><div class="av" data-photo-prev="${f.k}">${photoSrc(v) ? `<img src="${photoSrc(v)}" alt="">` : svg('camera')}</div><input type="hidden" name="${f.k}" value="${esc(v)}"><button type="button" class="btn btn-sm" data-photo-pick="${f.k}">Foto wählen</button><button type="button" class="btn btn-sm btn-red${v ? '' : ' hidden'}" data-photo-del="${f.k}">Entfernen</button></div>${hint}</div>`;
+    default: return `<div class="${cls}">${lab}<input id="${id}" name="${f.k}" type="${f.type || 'text'}" value="${esc(v)}"${ph}${req}${f.list ? ` list="dl_${f.k}"` : ''}>${f.list ? `<datalist id="dl_${f.k}">${optList(f.list).map(([o]) => `<option value="${esc(o)}">`).join('')}</datalist>` : ''}${hint}</div>`;
+  }
+}
+function readForm(form, fields) {
+  const out = {};
+  fields.forEach(f => {
+    if (!f.k || ['sec', 'note'].includes(f.type)) return;
+    if (f.type === 'check') { out[f.k] = !!form.elements[f.k]?.checked; return; }
+    if (f.type === 'multi') { out[f.k] = $$(`[data-multi="${f.k}"] input:checked`, form).map(i => i.value); return; }
+    const el = form.elements[f.k]; if (!el) return;
+    let v = el.value.trim();
+    if (f.type === 'money' || f.type === 'number') v = v === '' ? (f.type === 'money' ? 0 : '') : num(v);
+    if (f.type === 'iban') v = cleanIban(v);
+    out[f.k] = v;
+  });
+  return out;
+}
+/** Allgemeines Formular. def: { title, fields(x), wide, validate(x)->Fehlertext, save(x) } */
+function openForm(def, item = {}) {
+  const x = { ...item };
+  const fields = def.fields(x);
+  const m = openModal({
+    title: esc(def.title), wide: def.wide !== false,
+    body: `<form id="genForm" novalidate>${def.intro ? `<div class="note" style="margin-bottom:14px">${def.intro}</div>` : ''}<div class="fg${def.c3 ? ' c3' : ''}">${fields.map(f => fieldHTML(f, x)).join('')}</div></form>`,
+    foot: `${def.del ? `<button class="btn btn-red l" id="fDel">${svg('trash')} Löschen</button>` : ''}<button class="btn" data-close>Abbrechen</button><button class="btn btn-p" id="fSave">${esc(def.saveLabel || 'Speichern')}</button>`
+  });
+  const form = $('#genForm', m);
+  $$('[data-multi] label', form).forEach(l => l.addEventListener('click', e => { e.preventDefault(); const i = l.querySelector('input'); i.checked = !i.checked; l.classList.toggle('on', i.checked); }));
+  $$('[data-photo-pick]', form).forEach(b => b.onclick = async () => { const file = await pickFile('image/*'); if (!file) return; const url = await shrinkImage(file, 800); const k = b.dataset.photoPick; form.elements[k].value = url; $(`[data-photo-prev="${k}"]`, form).innerHTML = `<img src="${url}" alt="">`; $(`[data-photo-del="${k}"]`, form).classList.remove('hidden'); });
+  $$('[data-photo-del]', form).forEach(b => b.onclick = () => { const k = b.dataset.photoDel; form.elements[k].value = ''; $(`[data-photo-prev="${k}"]`, form).innerHTML = svg('camera'); b.classList.add('hidden'); });
+  $$('input[name]', form).forEach(i => { const f = fields.find(f => f.k === i.name); if (f?.type === 'iban') i.addEventListener('blur', () => { const v = cleanIban(i.value); i.value = v ? fmtIban(v) : ''; $(`[data-err="${f.k}"]`, form).classList.toggle('hidden', !v || ibanOk(v)); }); if (f?.type === 'money') i.addEventListener('blur', () => { if (i.value.trim()) i.value = fmtNum(num(i.value), 2); }); });
+  def.onOpen && def.onOpen(form, m);
+  form.addEventListener('submit', e => { e.preventDefault(); $('#fSave', m).click(); });
+  $('#fSave', m).onclick = async () => {
+    const vals = readForm(form, fields);
+    for (const f of fields) if (f.req && (vals[f.k] === '' || vals[f.k] == null)) { toast(`Bitte „${f.label}“ ausfüllen.`, { err: true }); form.elements[f.k]?.focus(); return; }
+    for (const f of fields) if (f.type === 'iban' && vals[f.k] && !ibanOk(vals[f.k])) { toast('Die IBAN stimmt nicht. Bitte prüfen.', { err: true }); form.elements[f.k]?.focus(); return; }
+    const merged = { ...x, ...vals };
+    for (const f of fields) if (f.type === 'photo' && String(merged[f.k] || '').startsWith('data:')) { if (x[f.k]) await delPhoto(x[f.k]); merged[f.k] = await savePhoto(merged[f.k]); } else if (f.type === 'photo' && !merged[f.k] && x[f.k]) await delPhoto(x[f.k]);
+    const err = def.validate && def.validate(merged, form); if (err) { toast(err, { err: true }); return; }
+    let r; try { r = await def.save(merged, form); } catch (e) { toast(e.message, { err: true, ms: 6000 }); return; } if (r === false) return;
+    closeModal(); render();
+  };
+  if (def.del) $('#fDel', m).onclick = async () => { try { if (await def.del(x)) { closeModal(); render(); } } catch (e) { toast(e.message, { err: true, ms: 6000 }); } };
+  return m;
+}
+
+/* ---------- Navigation ---------- */
+const NAV = [
+  ['', [['dashboard', 'Übersicht', 'home']]],
+  ['Bienen', [['colonies', 'Völker & Stockkarte', 'hive'], ['stands', 'Bienenstände', 'pin'], ['health', 'Varroa & Bestandsbuch', 'shield'], ['feeding', 'Fütterung', 'drop'], ['moves', 'Wanderung', 'truck']]],
+  ['Honig', [['harvests', 'Ernte', 'honey'], ['batches', 'Abfüllung & Etiketten', 'jar'], ['sales', 'Verkauf', 'euro']]],
+  ['Büro', [['members', 'Kunden', 'users'], ['tasks', 'Aufgaben', 'clipboard'], ['cash', 'Kasse', 'bank']]],
+  ['', [['settings', 'Einstellungen', 'settings']]]
+];
+const LABELS = Object.fromEntries(NAV.flatMap(([, it]) => it.map(([k, l]) => [k, l])));
+let view = 'dashboard', viewState = {};
+function navCounts() {
+  const c = {}, act = activeColonies();
+  c.colonies = [act.length, ''];
+  const due = inspectDue().length; if (due) c.colonies = [due, 'warn'];
+  const hi = miteAlerts().length; if (hi) c.health = [hi, 'bad'];
+  const mv = data.moves.filter(m => !m.back && m.until && m.until <= addDays(today(), 7)).length; if (mv) c.moves = [mv, 'warn'];
+  const low = data.batches.filter(b => batchStock(b) > 0 && batchStock(b) <= num(data.settings.lowStock)).length; if (low) c.batches = [low, 'warn'];
+  const op = data.sales.filter(s => !s.paid).length; if (op) c.sales = [op, 'warn'];
+  const tk = data.tasks.filter(t => !t.done && t.due && t.due <= addDays(today(), 7)).length; if (tk) c.tasks = [tk, 'warn'];
+  return c;
+}
+function renderNav() {
+  const cnt = navCounts(), c = data.club, logo = photoSrc(c.logo);
+  $('#side').innerHTML = `<div class="brand"><div class="crest">${logo ? `<img src="${logo}" alt="">` : APP_LOGO}</div><div><b>${esc(c.name || APPNAME)}</b><span>${esc(APPNAME)}${IS_DEMO ? ' · Demo' : ''}</span></div></div>
+  <nav class="nav">${NAV.map(([h, it]) => `${h ? `<h6>${h}</h6>` : ''}${it.map(([k, l, i]) => `<button data-go="${k}" class="${view === k ? 'on' : ''}">${svg(i)}<span>${l}</span>${cnt[k] ? `<span class="cnt ${cnt[k][1]}">${cnt[k][0]}</span>` : ''}</button>`).join('')}`).join('')}</nav>
+  <div class="side-foot"><span>${backupLabel()}</span><button class="iconbtn" data-act="theme" title="Hell / Dunkel" aria-label="Hell oder dunkel">${svg('moon')}</button></div>`;
+}
+function backupLabel() { const b = data.meta.lastBackup; if (!b) return '⚠ Noch nie gesichert'; const d = daysBetween(b.slice(0, 10), today()); return d === 0 ? '✓ Heute gesichert' : `Gesichert vor ${plural(d, 'Tag', 'Tagen')}`; }
+function go(v, state = {}) { if (!VIEWS[v]) v = 'dashboard'; view = v; viewState = state; document.body.classList.remove('nav-open'); try { history.replaceState(null, '', '#' + v); } catch (e) {} render(); window.scrollTo(0, 0); }
+
+/* ---------- Seiten-Bausteine ---------- */
+const head = (title, text, acts = '') => `<div class="head"><div><h2>${title}</h2>${text ? `<p>${text}</p>` : ''}</div><div class="acts">${acts}</div></div>`;
+const emptyBox = (title, text, btn = '') => `<div class="empty"><b>${title}</b>${text}${btn ? `<div style="margin-top:12px">${btn}</div>` : ''}</div>`;
+const pill = (t, cls = '') => `<span class="pill ${cls}">${esc(t)}</span>`;
+const kpi = (l, v, s, icon, cls = '') => `<div class="card kpi ${cls}"><div class="ic">${svg(icon)}</div><div class="l">${l}</div><div class="v">${v}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
+const moreBtn = acts => `<div class="menu-wrap"><button class="iconbtn" data-menu='${esc(JSON.stringify(acts))}' aria-label="Mehr">${svg('more')}</button></div>`;
+const searchBox = (val, ph = 'Suchen …') => `<div class="search">${svg('search')}<input type="search" id="q" value="${esc(val || '')}" placeholder="${esc(ph)}" aria-label="Suchen"></div>`;
+const chips = (key, opts, cur) => `<div class="chips">${opts.map(([v, l, n]) => `<button class="chip${String(cur) === String(v) ? ' on' : ''}" data-chip="${key}:${esc(v)}">${esc(l)}${n !== undefined ? `<i>${n}</i>` : ''}</button>`).join('')}</div>`;
+const avatar = (m, cls = '') => { const p = photoSrc(m?.photo); return `<div class="av ${cls}">${p ? `<img src="${p}" alt="">` : esc(initials(fullName(m)))}</div>`; };
+const amt = (n, signed = false) => `<span class="amt ${signed ? (n < 0 ? 'neg' : n > 0 ? 'pos' : '') : ''}">${fmtMoney(n)}</span>`;
+const matchQ = (q, ...vals) => !q || vals.join(' ').toLowerCase().includes(q.toLowerCase());
+
+/* ---------- Rendern ---------- */
+const VIEWS = {};
+function render() {
+  if (!data.meta.setupDone && !IS_DEMO) { renderOnboarding(); return; }
+  if (!$('#side')) shell();
+  renderNav();
+  $('#title').textContent = LABELS[view] || APPNAME;
+  const keepQ = document.activeElement?.id === 'q' ? document.activeElement.selectionStart : null;
+  try { $('#content').innerHTML = VIEWS[view](); } catch (e) { console.error(e); $('#content').innerHTML = `<div class="note red">Fehler beim Anzeigen: ${esc(e.message)}</div>`; }
+  if (keepQ !== null) { const q = $('#q'); if (q) { q.focus(); q.setSelectionRange(keepQ, keepQ); } }
+  VIEWS[view].after && VIEWS[view].after();
+}
+function shell() {
+  document.body.innerHTML = `${IS_DEMO ? '<div class="demo-bar">DEMO-VERSION – alle Daten sind erfunden. <button class="btn btn-sm" data-act="demoReset" style="margin-left:8px;padding:1px 9px">Demo zurücksetzen</button></div>' : ''}
+  <div class="app"><aside class="side" id="side"></aside><div class="scrim" data-act="navClose"></div>
+  <div class="main"><header class="top"><button class="iconbtn burger" data-act="nav" aria-label="Menü">${svg('menu')}</button><h1 id="title"></h1>
+  <button class="iconbtn" data-act="quickAdd" title="Neu anlegen" aria-label="Neu anlegen">${svg('plus')}</button><button class="iconbtn" data-act="backup" title="Sicherung speichern" aria-label="Sicherung speichern">${svg('download')}</button></header>
+  <main class="content" id="content"></main></div></div><div id="toasts" class="toasts"></div>`;
+}
+
+/* ---------- Aktionen (Klicks) ---------- */
+const ACTS = {};
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go, g.dataset.state ? JSON.parse(g.dataset.state) : {}); return; }
+  const mb = e.target.closest('[data-menu]'); if (mb) { e.stopPropagation(); if (mb.parentElement.querySelector('.menu')) { closeMenus(); return; } openMenu(mb, JSON.parse(mb.dataset.menu)); return; }
+  const ch = e.target.closest('[data-chip]'); if (ch) { const [k, ...v] = ch.dataset.chip.split(':'); viewState[k] = v.join(':'); render(); return; }
+  const tab = e.target.closest('[data-tab]'); if (tab) { viewState.tab = tab.dataset.tab; render(); return; }
+  const a = e.target.closest('[data-act]'); if (!a) { const row = e.target.closest('tr[data-open]'); if (row && !e.target.closest('button,a,input,label,select')) runAct(row.dataset.open); return; }
+  e.preventDefault(); closeMenus(); runAct(a.dataset.act, a);
+});
+function runAct(s, el) { const [name, ...args] = String(s).split(':'); const f = ACTS[name]; if (!f) { console.warn('Unbekannt', name); return; } try { window.__actEl = el; const r = f(...args); if (r && r.catch) r.catch(err => { console.error(err); toast('Fehler: ' + err.message, { err: true }); }); } catch (err) { console.error(err); toast('Fehler: ' + err.message, { err: true }); } }
+document.addEventListener('input', debounce(e => { if (e.target.id === 'q') { viewState.q = e.target.value; render(); } }, 180));
+ACTS.nav = () => document.body.classList.toggle('nav-open');
+ACTS.navClose = () => document.body.classList.remove('nav-open');
+ACTS.theme = () => { const cur = document.documentElement.dataset.theme === 'dark' ? '' : 'dark'; data.meta.theme = cur; applyTheme(); save(); };
+function applyTheme() { document.documentElement.dataset.theme = data.meta.theme || ''; }
+ACTS.quickAdd = () => {
+  openModal({ title: 'Neu anlegen', body: `<div class="grid g2">${[['newInspection', 'hive', 'Durchsicht (Stockkarte)'], ['newMite', 'bug', 'Varroa zählen'], ['newTreatment', 'shield', 'Behandlung (Bestandsbuch)'], ['newFeeding', 'drop', 'Fütterung'], ['newHarvest', 'honey', 'Honigernte'], ['newBatch', 'jar', 'Abfüllung / Los'], ['newSale', 'euro', 'Verkauf'], ['newColony', 'hive', 'Neues Volk'], ['newTask', 'clipboard', 'Aufgabe'], ['newBookingOut', 'bank', 'Ausgabe']].map(([a, i, l]) => `<button class="btn" style="justify-content:flex-start;padding:14px" data-act="qa:${a}">${svg(i)} ${l}</button>`).join('')}</div>` });
+};
+ACTS.qa = a => { closeModal(); runAct(a); };
+
+/* =========================================================
+   Imker-Grundlagen: Logo, Icons, Völker, Varroa, Lager, Bienenjahr
+   ========================================================= */
+const APP_LOGO = `<svg viewBox="0 0 40 40" style="width:100%;height:100%"><defs><linearGradient id="ziG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c344"/><stop offset="1" stop-color="#d98c0a"/></linearGradient></defs><rect width="40" height="40" rx="10" fill="url(#ziG)"/><path d="M20 6l8 4.6v9.2L20 24.4l-8-4.6v-9.2z" fill="#fff3cf" opacity=".55"/><g transform="translate(20 23)"><ellipse cx="0" cy="0" rx="6.4" ry="5" fill="#3a2508"/><path d="M-3.2 -4.6v9.2M0 -5v10M3.2 -4.6v9.2" stroke="#f6c344" stroke-width="1.6"/><ellipse cx="-4.8" cy="-6.4" rx="4" ry="2.6" fill="#fff" opacity=".92" transform="rotate(-28 -4.8 -6.4)"/><ellipse cx="4.8" cy="-6.4" rx="4" ry="2.6" fill="#fff" opacity=".92" transform="rotate(28 4.8 -6.4)"/><circle cx="-7.6" cy="0" r="2.4" fill="#3a2508"/></g></svg>`;
+Object.assign(ICON, {
+  hive: '<path d="M6 7.5h12M5 11h14M5 14.5h14M6 18h12"/><path d="M7 4.5h10l2 3v12.5H5V7.5z"/><path d="M10.5 18v2h3v-2"/>',
+  honey: '<path d="M8 4h8v3a5 5 0 0 1 2 4v7a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-7a5 5 0 0 1 2-4z"/><path d="M8 7h8M9.5 13.5c1-1 2-1 3 0s2 1 3 0"/>',
+  jar: '<rect x="6" y="7" width="12" height="13.5" rx="2.5"/><path d="M7.5 4h9v3h-9zM9 12h6M9 15.5h6"/>',
+  drop: '<path d="M12 3.5s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  bug: '<ellipse cx="12" cy="13.5" rx="4.5" ry="6"/><path d="M12 7.5V20M7.5 11h9M7.5 15.5h9M9 5l1.5 2M15 5l-1.5 2M4 10l3 1.5M20 10l-3 1.5M4 18l3-1.5M20 18l-3-1.5"/>',
+  pin: '<path d="M12 21s6.5-6.2 6.5-11a6.5 6.5 0 0 0-13 0c0 4.8 6.5 11 6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  truck: '<path d="M2.5 16.5V7h11v9.5M13.5 10h4.5l3.5 3.5v3h-8"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/>',
+  crown: '<path d="M4 18h16l1.5-10-5 3.5L12 5l-4.5 6.5-5-3.5z"/>',
+  phone: '<path d="M5 4h3.5l1.5 4-2 1.5a10 10 0 0 0 6.5 6.5L16 14l4 1.5V19a1.5 1.5 0 0 1-1.6 1.5C10.5 20 4 13.5 3.5 5.6A1.5 1.5 0 0 1 5 4z"/>'
+});
+const curYear = () => new Date().getFullYear();
+const colById = id => byId('colonies', id);
+const colLabel = c => c ? `Volk ${c.no}${c.name ? ' „' + c.name + '“' : ''}` : '–';
+const colName = id => colLabel(colById(id));
+const standName = id => byId('stands', id)?.name || '';
+const activeColonies = () => data.colonies.filter(c => !c.endDate);
+const colsAt = (sid, on = today()) => activeColonies().filter(c => colStand(c, on) === sid);
+/* aktueller Standort: Wanderung schlägt Heimatstand */
+function colStand(c, on = today()) { const mv = data.moves.filter(m => m.colonies.includes(c.id) && m.date <= on && (!m.back || m.back > on)).sort((a, b) => b.date.localeCompare(a.date))[0]; return mv ? mv.to : c.stand; }
+const lastInsp = c => data.inspections.filter(i => i.colony === c.id).sort((a, b) => b.date.localeCompare(a.date))[0];
+const lastMite = c => data.mites.filter(i => i.colony === c.id).sort((a, b) => b.date.localeCompare(a.date))[0];
+const mitesPerDay = m => m ? (m.method === 'Gemülldiagnose (Windel)' ? r2(num(m.count) / Math.max(1, num(m.days) || 1)) : num(m.count)) : 0;
+/* Schwelle: Windel Milben/Tag aus Einstellung; Puderzucker/Auswaschen Milben je 10 g Bienen ~ grob 3 % → Einstellung/3 */
+const miteHigh = m => m && (m.method === 'Gemülldiagnose (Windel)' ? mitesPerDay(m) >= num(data.settings.miteLimit) : m.method === 'Drohnenbrut-Kontrolle' ? num(m.count) >= 10 : num(m.count) >= 3);
+const miteAlerts = () => activeColonies().filter(c => { const m = lastMite(c); return m && miteHigh(m) && !data.treatments.some(t => t.colonies.includes(c.id) && t.date >= m.date); });
+const inSeason = (d = today()) => { const m = Number(d.slice(5, 7)); return m >= 4 && m <= 8; };
+const inspectDue = () => inSeason() ? activeColonies().filter(c => { const l = lastInsp(c); return !l || daysBetween(l.date, today()) > num(data.settings.inspectDays); }) : [];
+const inWait = t => t.wait && addDays(t.dateEnd || t.date, num(t.wait)) >= today();
+const batchSold = b => sum(data.sales.filter(s => s.batch === b.id), s => s.qty);
+const batchStock = b => Math.max(0, num(b.jars) - batchSold(b));
+const harvestKg = y => sum(data.harvests.filter(h => yearOf(h.date) === y), h => h.kg);
+const dateCell = (d, warn = Number(data.settings.warnDays) || 21) => !d ? '<span class="muted">–</span>' : `<span class="${d < today() ? 'neg' : d <= addDays(today(), warn) ? 'warnc' : ''}">${fmtDate(d)}</span>`;
+const yearsOf = (col, f = 'date') => [...new Set([curYear(), ...data[col].map(x => yearOf(x[f]))])].filter(Boolean).sort((a, b) => b - a);
+const yearSel = (col, y) => `<select class="btn" id="ySel" aria-label="Jahr">${yearsOf(col).map(v => `<option value="${v}"${v === y ? ' selected' : ''}>${v}</option>`).join('')}</select>`;
+const yearAfter = () => { const s = $('#ySel'); if (s) s.onchange = () => { viewState.y = s.value; render(); }; };
+const qDot = c => c.queenYear ? `<span class="qdot q-${queenColor(c.queenYear)}" title="Königin ${c.queenYear} (${queenColor(c.queenYear)})"></span>` : '';
+const stars = (n, max = 4) => n ? '●'.repeat(n) + '○'.repeat(Math.max(0, max - n)) : '–';
+const colMulti = (k, label, all = false) => ({ k, label, type: 'multi', opts: () => colonyOpts(all) });
+/* Bienenjahr: was steht im Monat an */
+const BEE_MONTHS = ['Winterruhe. Flugloch frei halten, Totenfall beobachten. Restentmilbung nur in brutfreien Völkern.', 'Winterruhe. Material vorbereiten, Rähmchen drahten, Mittelwände bestellen.', 'Reinigungsflüge. Futter prüfen (Kippkontrolle), Gemülle ansehen.', 'Erste Durchsicht bei über 15 °C. Honigraum geben, Drohnenrahmen einhängen.', 'Schwarmzeit: alle 7–9 Tage Weiselzellen kontrollieren. Frühtracht ernten.', 'Ableger bilden. Sommertracht beginnt. Drohnenbrut schneiden.', 'Sommerernte. Varroa zählen! Nach der Ernte sofort behandeln.', 'Varroa-Behandlung und Auffüttern. Fluglöcher einengen (Räuberei).', 'Auffütterung abschließen. Behandlungserfolg prüfen.', 'Einwintern. Mäusegitter anbringen. Völker wiegen.', 'Winterruhe. Wachs schmelzen, Honig verkaufen.', 'Brutfreiheit: Winterbehandlung mit Oxalsäure. Bestandsbuch abschließen.'];
+
+/* =========================================================
+   Übersicht, Völker & Stockkarte, Bienenstände
+   ========================================================= */
+VIEWS.dashboard = () => {
+  const c = data.club, y = curYear(), T = today(), act = activeColonies(), mo = new Date().getMonth();
+  const stock = data.batches.filter(b => batchStock(b) > 0), jars = sum(stock, batchStock);
+  const sold = sum(data.sales.filter(s => yearOf(s.date) === y), s => num(s.qty) * num(s.price));
+  const todo = [
+    ...miteAlerts().map(col => { const m = lastMite(col); return [`${colLabel(col)}: ${m.method === 'Gemülldiagnose (Windel)' ? fmtNum(mitesPerDay(m), 1) + ' Milben pro Tag' : m.count + ' Milben'} am ${fmtDate(m.date)} – behandeln!`, 'red', 'health']; }),
+    ...inspectDue().map(col => { const l = lastInsp(col); return [`${colLabel(col)}: ${l ? 'letzte Durchsicht vor ' + daysBetween(l.date, T) + ' Tagen' : 'noch keine Durchsicht'}${Number(T.slice(5, 7)) <= 6 ? ' – Schwarmkontrolle!' : ''}`, 'gold', 'colonies']; }),
+    ...data.treatments.filter(inWait).map(t => [`Wartezeit ${t.drug}: kein Honig ernten bis ${fmtDate(addDays(t.dateEnd || t.date, num(t.wait)))}`, 'gold', 'health']),
+    ...data.moves.filter(m => !m.back && m.until && m.until <= addDays(T, 7)).map(m => [`Wanderung ${standName(m.to)}: Rückkehr geplant am ${fmtDate(m.until)}`, m.until < T ? 'red' : 'gold', 'moves']),
+    ...data.batches.filter(b => batchStock(b) > 0 && batchStock(b) <= num(data.settings.lowStock)).map(b => [`Nur noch ${batchStock(b)} Gläser ${b.sort} (${b.lot})`, '', 'batches']),
+    ...data.sales.filter(s => !s.paid).map(s => [`Nicht bezahlt: ${s.customer || memberLabel(s.member)} – ${fmtMoney(num(s.qty) * num(s.price))}`, 'gold', 'sales']),
+    ...data.tasks.filter(t => !t.done && t.due && t.due <= addDays(T, 7)).map(t => [`Aufgabe: ${t.title} – bis ${fmtDate(t.due)}`, t.due < T ? 'red' : '', 'tasks'])
+  ];
+  return `<div class="hero ihero"><div><h2>${esc(c.name || 'Meine Imkerei')}</h2><p>${fmtDateLong(T)}</p>
+    <div class="beetip"><b>${MONTHS[mo]} im Bienenjahr:</b> ${BEE_MONTHS[mo]}</div></div>
+    <div class="ready">
+      <div><span>${svg('hive')} Völker</span><b>${act.length}</b><i>an ${data.stands.filter(s => colsAt(s.id).length).length} Ständen</i></div>
+      <div><span>${svg('honey')} Ernte ${y}</span><b>${fmtNum(harvestKg(y))} kg</b><i>${act.length ? fmtNum(harvestKg(y) / act.length, 1) + ' kg je Volk' : ''}</i></div>
+      <div><span>${svg('jar')} Im Lager</span><b>${fmtNum(jars)}</b><i>Gläser</i></div>
+      <div><span>${svg('euro')} Verkauf ${y}</span><b>${fmtMoney(sold).replace(',00', '')}</b><i>${fmtNum(sum(data.sales.filter(s => yearOf(s.date) === y), s => s.qty))} Gläser</i></div>
+    </div></div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card pad"><div class="sec-t"><h3>${svg('alert')} Zu erledigen</h3></div>${todo.length ? `<div class="list">${todo.slice(0, 12).map(([t, cls, g]) => `<div class="li" style="cursor:pointer" data-go="${g}"><span class="dot ${cls}"></span><div class="grow">${esc(t)}</div>${svg('arrowr')}</div>`).join('')}</div>` : emptyBox('Alles im Lot 🐝', 'Keine Varroa-Warnung, keine offenen Durchsichten.')}</div>
+    <div class="card pad"><div class="sec-t"><h3>${svg('hive')} Meine Völker</h3><button class="btn btn-sm btn-p" data-act="newInspection">${svg('plus')} Durchsicht</button></div>
+      ${act.length ? `<div class="hexgrid">${act.sort((a, b) => String(a.no).localeCompare(String(b.no), 'de', { numeric: true })).map(col => { const l = lastInsp(col), m = lastMite(col), hi = m && miteHigh(m); return `<button class="hex ${hi ? 'bad' : !l || daysBetween(l.date, T) > num(data.settings.inspectDays) && inSeason() ? 'warn' : ''}" data-act="openColony:${col.id}" title="${esc(colLabel(col))}"><b>${esc(col.no)}</b>${qDot(col)}<small>${esc(standName(colStand(col)).slice(0, 12))}</small></button>`; }).join('')}</div>` : emptyBox('Noch keine Völker', 'Leg zuerst einen Bienenstand und dann die Völker an.', `<button class="btn btn-p" data-act="newColony">${svg('plus')} Volk</button>`)}</div>
+  </div>
+  <div class="card pad" style="margin-top:16px"><div class="sec-t"><h3>${svg('clipboard')} Letzte Einträge</h3></div>${(() => { const ev = [...data.inspections.map(i => [i.date, 'Durchsicht', colName(i.colony), i.note || '', 'hive']), ...data.treatments.map(t => [t.date, 'Behandlung', t.colonies.map(colName).join(', '), t.drug, 'shield']), ...data.harvests.map(h => [h.date, 'Ernte', `${fmtNum(h.kg, 1)} kg ${h.sort}`, '', 'honey']), ...data.feedings.map(f => [f.date, 'Fütterung', f.colonies.map(colName).join(', '), `${f.amount} ${f.unit} ${f.kind}`, 'drop'])].sort((a, b) => b[0].localeCompare(a[0])).slice(0, 7); return ev.length ? `<div class="list">${ev.map(([d, k, t, n, i]) => `<div class="li"><div class="av">${svg(i)}</div><div class="grow"><b>${esc(k)}</b> · ${esc(t)}<div class="small muted">${fmtDate(d)}${n ? ' · ' + esc(n) : ''}</div></div></div>`).join('')}</div>` : emptyBox('Noch nichts eingetragen', ''); })()}</div>`;
+};
+
+/* ---------- Völker ---------- */
+VIEWS.colonies = () => {
+  const f = viewState.f || 'act', s = viewState.s || '', q = viewState.q || '';
+  const list = data.colonies.filter(c => (f === 'act' ? !c.endDate : c.endDate) && (!s || colStand(c) === s) && matchQ(q, c.no, c.name, c.queenRace, standName(c.stand))).sort((a, b) => String(a.no).localeCompare(String(b.no), 'de', { numeric: true }));
+  return head('Völker & Stockkarte', 'Jedes Volk mit Königin, Beute und Standort. Ein Klick öffnet die Stockkarte mit allen Durchsichten, Varroa-Zählungen und Behandlungen.', `<button class="btn" data-act="printCards">${svg('print')} Stockkarten</button><button class="btn" data-act="newInspection">${svg('plus')} Durchsicht</button><button class="btn btn-p" data-act="newColony">${svg('plus')} Volk</button>`) +
+  `<div class="tools">${searchBox(q, 'Nummer, Name, Rasse …')}${chips('f', [['act', 'Aktive Völker', activeColonies().length], ['end', 'Aufgelöst / eingegangen', data.colonies.filter(c => c.endDate).length]], f)}<select class="btn" id="sSel" aria-label="Stand"><option value="">Alle Stände</option>${data.stands.map(x => `<option value="${x.id}"${s === x.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
+  <div class="card tbl-wrap">${list.length ? `<table class="tbl"><thead><tr><th>Volk</th><th class="hm">Stand</th><th>Königin</th><th class="hm">Letzte Durchsicht</th><th>Varroa</th><th class="hm r">Ernte ${curYear()}</th></tr></thead><tbody>${list.map(c => { const l = lastInsp(c), m = lastMite(c); return `<tr class="click" data-open="openColony:${c.id}"><td><b>${esc(colLabel(c))}</b><span class="sub">${esc([c.hive, c.origin].filter(Boolean).join(' · '))}${c.endDate ? ' · ' + esc(c.endReason || '') + ' ' + fmtDate(c.endDate) : ''}</span></td><td class="hm">${esc(standName(colStand(c)))}${colStand(c) !== c.stand ? '<span class="sub">auf Wanderung</span>' : ''}</td><td>${qDot(c)} ${esc(c.queenYear || '–')}<span class="sub">${esc(c.queenRace || '')}</span></td><td class="hm">${l ? `${fmtDate(l.date)}<span class="sub">${esc([l.brood && 'Brut ' + l.brood, l.swarm && l.swarm !== 'keine' ? l.swarm : ''].filter(Boolean).join(' · '))}</span>` : '<span class="muted">–</span>'}</td><td>${m ? `<span class="${miteHigh(m) ? 'neg' : ''}">${m.method === 'Gemülldiagnose (Windel)' ? fmtNum(mitesPerDay(m), 1) + '/Tag' : m.count + ' Milben'}</span><span class="sub">${fmtDate(m.date)}</span>` : '<span class="muted">–</span>'}</td><td class="hm r">${fmtNum(sum(data.harvests.filter(h => yearOf(h.date) === curYear() && h.colonies.includes(c.id)), h => num(h.kg) / Math.max(1, h.colonies.length)), 1)} kg</td></tr>`; }).join('')}</tbody></table>` : emptyBox('Keine Völker', '', `<button class="btn btn-p" data-act="newColony">${svg('plus')} Volk</button>`)}</div>`;
+};
+VIEWS.colonies.after = () => { const s = $('#sSel'); if (s) s.onchange = () => { viewState.s = s.value; render(); }; };
+function colonyDef(c) {
+  const isNew = !byId('colonies', c.id);
+  return { title: isNew ? 'Neues Volk' : colLabel(c), fields: () => [
+    { k: 'no', label: 'Volk-Nummer', req: true }, { k: 'name', label: 'Name (optional)', ph: 'z. B. Sanfte Liese' },
+    { k: 'stand', label: 'Heimatstand', type: 'select', opts: () => standOpts(), req: true }, { k: 'hive', label: 'Beute / Rähmchenmaß', type: 'select', opts: HIVES },
+    { k: 'origin', label: 'Herkunft', type: 'select', opts: ORIGINS }, { k: 'since', label: 'Seit', type: 'date' },
+    { type: 'sec', label: 'Königin' }, { k: 'queenYear', label: 'Jahrgang', type: 'number', step: '1', hint: 'Die Zeichenfarbe ergibt sich aus dem Jahr.' }, { k: 'queenRace', label: 'Rasse / Linie', type: 'select', opts: [['', '–'], ...RACES] },
+    { k: 'queenMarked', label: 'Gezeichnet', type: 'check' }, { k: 'queenClip', label: 'Flügel beschnitten', type: 'check' }, { k: 'queenFrom', label: 'Züchter / Herkunft', full: true, ph: 'z. B. Belegstelle Norderney, eigene Nachzucht' },
+    { type: 'sec', label: 'Ende (nur ausfüllen, wenn das Volk nicht mehr besteht)' }, { k: 'endDate', label: 'Datum', type: 'date' }, { k: 'endReason', label: 'Grund', type: 'select', opts: [['', '–'], ...COL_END] },
+    { k: 'note', label: 'Notiz', type: 'textarea', full: true }
+  ], validate: v => data.colonies.some(x => x.id !== v.id && !x.endDate && String(x.no) === String(v.no)) && !v.endDate ? 'Diese Volk-Nummer gibt es schon.' : '',
+  save: v => { v.queenYear = v.queenYear === '' ? '' : Number(v.queenYear); upsert('colonies', v); toast('Gespeichert.'); },
+  del: isNew ? null : async v => { if (data.inspections.some(i => i.colony === v.id) || data.treatments.some(t => t.colonies.includes(v.id))) { toast('Dieses Volk hat Einträge in Stockkarte oder Bestandsbuch. Bitte stattdessen ein Ende-Datum eintragen.', { err: true, ms: 6000 }); return false; } if (!await confirmBox(`${esc(colLabel(v))} löschen?`, 'Löschen', true)) return false; removeFrom('colonies', v.id); return true; } };
+}
+ACTS.newColony = () => openForm(colonyDef({}), { id: pid(), no: String(Math.max(0, ...data.colonies.map(c => parseInt(c.no) || 0)) + 1), stand: data.stands[0]?.id || '', hive: data.colonies[0]?.hive || 'Zander', origin: 'Ableger', since: today(), queenYear: curYear(), queenMarked: true });
+ACTS.editColony = id => { if (topModal()) closeModal(); const c = colById(id); openForm(colonyDef(c), c); };
+ACTS.openColony = id => {
+  const c = colById(id), ins = data.inspections.filter(i => i.colony === id).sort((a, b) => b.date.localeCompare(a.date)), mi = data.mites.filter(m => m.colony === id).sort((a, b) => b.date.localeCompare(a.date)), tr = data.treatments.filter(t => t.colonies.includes(id)).sort((a, b) => b.date.localeCompare(a.date)), hv = data.harvests.filter(h => h.colonies.includes(id));
+  openModal({ title: `${esc(colLabel(c))} ${qDot(c)}`, wide: true, body: `<dl class="kv"><dt>Stand</dt><dd>${esc(standName(colStand(c)))}${colStand(c) !== c.stand ? ' (Wanderung, Heimat: ' + esc(standName(c.stand)) + ')' : ''}</dd><dt>Beute</dt><dd>${esc(c.hive || '–')} · ${esc(c.origin || '')} seit ${fmtDate(c.since)}</dd><dt>Königin</dt><dd>${c.queenYear ? `${c.queenYear} (${queenColor(c.queenYear)})` : '–'} ${esc(c.queenRace || '')}${c.queenMarked ? ' · gezeichnet' : ''}${c.queenClip ? ' · beschnitten' : ''}${c.queenFrom ? ' · ' + esc(c.queenFrom) : ''}</dd><dt>Ernte</dt><dd>${hv.length ? yearsOf('harvests').map(y => { const k = sum(hv.filter(h => yearOf(h.date) === y), h => num(h.kg) / Math.max(1, h.colonies.length)); return k ? `${y}: ${fmtNum(k, 1)} kg` : ''; }).filter(Boolean).join(' · ') : '–'}</dd></dl>
+    <div class="fsec">Stockkarte – Durchsichten</div>${ins.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Waben</th><th>Brut</th><th>Kö.</th><th>Weiselz.</th><th>Sanftm.</th><th>Futter</th><th>Notiz</th></tr></thead><tbody>${ins.slice(0, 12).map(i => `<tr class="click" data-act="editInspection:${i.id}"><td class="nowrap">${fmtDate(i.date)}</td><td>${esc(i.frames || '')}</td><td>${esc(i.brood || '')}</td><td>${i.queenSeen ? '✓' : i.eggs ? 'Stifte' : ''}</td><td>${i.cells ? `<b class="neg">${i.cells}</b>` : ''}${i.swarm && i.swarm !== 'keine' ? `<span class="sub">${esc(i.swarm)}</span>` : ''}</td><td>${stars(num(i.temper))}</td><td>${esc(i.food || '')}</td><td class="small">${esc(i.note || '')}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">Noch keine Durchsicht.</p>'}
+    <div class="fsec">Varroa</div>${mi.length ? `<table class="tbl"><tbody>${mi.slice(0, 6).map(m => `<tr><td>${fmtDate(m.date)}</td><td>${esc(m.method)}</td><td class="r"><b class="${miteHigh(m) ? 'neg' : ''}">${m.method === 'Gemülldiagnose (Windel)' ? fmtNum(mitesPerDay(m), 1) + ' / Tag' : m.count + ' Milben'}</b></td></tr>`).join('')}</tbody></table>` : '<p class="muted">Noch nicht gezählt.</p>'}
+    <div class="fsec">Behandlungen</div>${tr.length ? `<table class="tbl"><tbody>${tr.slice(0, 6).map(t => `<tr><td>${fmtDate(t.date)}</td><td>${esc(t.drug)}</td><td>${esc(t.amount ? t.amount + ' ' + (t.unit || '') : '')}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">Keine.</p>'}`,
+    foot: `<button class="btn l" data-act="printCard:${c.id}">${svg('print')} Stockkarte</button><button class="btn" data-act="editColony:${c.id}">${svg('edit')} Bearbeiten</button><button class="btn" data-act="newMite:${c.id}">${svg('bug')} Varroa</button><button class="btn btn-p" data-act="newInspection:${c.id}">${svg('plus')} Durchsicht</button>` });
+};
+function inspectionDef(i) {
+  const isNew = !byId('inspections', i.id);
+  return { title: isNew ? 'Durchsicht' : 'Durchsicht ' + fmtDate(i.date), fields: () => [
+    { k: 'colony', label: 'Volk', type: 'select', opts: () => [['', '– bitte wählen –'], ...colonyOpts()], req: true }, { k: 'date', label: 'Datum', type: 'date', req: true },
+    { k: 'frames', label: 'Besetzte Waben / Zargen', ph: 'z. B. 2 Zargen, 16 Waben' }, { k: 'brood', label: 'Brut', type: 'select', opts: ['', 'geschlossen', 'lückig', 'wenig', 'keine', 'Drohnenbrütig'] },
+    { k: 'eggs', label: 'Stifte (Eier) gesehen', type: 'check' }, { k: 'queenSeen', label: 'Königin gesehen', type: 'check' },
+    { k: 'cells', label: 'Weiselzellen (Anzahl)', type: 'number', step: '1' }, { k: 'swarm', label: 'Schwarmstimmung', type: 'select', opts: ['keine', 'Spielnäpfchen', 'Schwarmstimmung', 'Zellen gebrochen', 'Abgeschwärmt'] },
+    { k: 'temper', label: 'Sanftmut (1–4, 4 = sehr sanft)', type: 'select', opts: [['', '–'], ['4', '4 – sehr sanft'], ['3', '3 – sanft'], ['2', '2 – nervös'], ['1', '1 – stechlustig']] }, { k: 'calm', label: 'Wabensitz (1–4)', type: 'select', opts: [['', '–'], ['4', '4 – sehr ruhig'], ['3', '3'], ['2', '2'], ['1', '1 – läuft ab']] },
+    { k: 'food', label: 'Futter', type: 'select', opts: ['', 'reichlich', 'ausreichend', 'knapp', 'kein Futter!'] }, { k: 'honeyRooms', label: 'Honigräume', type: 'number', step: '1' },
+    { k: 'action', label: 'Was gemacht?', full: true, list: ['Honigraum aufgesetzt', 'Drohnenrahmen geschnitten', 'Weiselzellen gebrochen', 'Ableger gebildet', 'Mittelwände gegeben', 'Fluglochkeil eingesetzt', 'Völker vereinigt'] },
+    { k: 'note', label: 'Notiz / nächstes Mal', type: 'textarea', full: true }, { k: 'weight', label: 'Gewicht Beute (kg)', type: 'number', step: '0.1' }
+  ], save: v => { ['cells', 'temper', 'calm', 'honeyRooms', 'weight'].forEach(k => v[k] = v[k] === '' ? '' : Number(v[k])); upsert('inspections', v); data.meta.lastColony = v.colony; toast('Durchsicht gespeichert.' + (v.cells && Number(v.date.slice(5, 7)) <= 7 ? ' Achtung: Weiselzellen – Schwarm verhindern!' : '')); },
+  del: isNew ? null : async v => { if (!await confirmBox('Durchsicht löschen?', 'Löschen', true)) return false; removeFrom('inspections', v.id); return true; } };
+}
+ACTS.newInspection = (cid = '') => { if (topModal()) closeModal(); openForm(inspectionDef({}), { id: pid(), colony: cid || '', date: today(), swarm: 'keine' }); };
+ACTS.editInspection = id => { if (topModal()) closeModal(); const i = byId('inspections', id); openForm(inspectionDef(i), i); };
+function cardHTML(c) { const ins = data.inspections.filter(i => i.colony === c.id && yearOf(i.date) === curYear()).sort((a, b) => a.date.localeCompare(b.date)); return `<h1>Stockkarte ${esc(colLabel(c))}</h1><table><tr><th style="width:22%">Stand</th><td>${esc(standName(colStand(c)))}</td><th style="width:22%">Beute</th><td>${esc(c.hive || '')}</td></tr><tr><th>Königin</th><td>${c.queenYear || ''} ${queenColor(c.queenYear)} ${esc(c.queenRace || '')}</td><th>Herkunft</th><td>${esc(c.origin || '')} ${fmtDate(c.since)}</td></tr></table><table><thead><tr><th>Datum</th><th>Waben</th><th>Brut</th><th>Kö./Stifte</th><th>Weiselz.</th><th>Sanftm.</th><th>Futter</th><th>Gemacht / Notiz</th></tr></thead><tbody>${ins.map(i => `<tr><td>${fmtDate(i.date)}</td><td>${esc(i.frames || '')}</td><td>${esc(i.brood || '')}</td><td>${i.queenSeen ? 'Kö' : ''}${i.eggs ? ' St' : ''}</td><td>${i.cells || ''}</td><td>${i.temper || ''}</td><td>${esc(i.food || '')}</td><td class="small">${esc([i.action, i.note].filter(Boolean).join(' – '))}</td></tr>`).join('')}${Array.from({ length: Math.max(4, 14 - ins.length) }, () => '<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>').join('')}</tbody></table>`; }
+ACTS.printCard = id => printHTML('Stockkarte', letterhead() + cardHTML(colById(id)));
+ACTS.printCards = () => printHTML('Stockkarten', activeColonies().sort((a, b) => String(a.no).localeCompare(String(b.no), 'de', { numeric: true })).map(c => letterhead() + cardHTML(c)).join('<div class="pb"></div>'));
+
+/* ---------- Bienenstände ---------- */
+VIEWS.stands = () => {
+  const list = data.stands.filter(s => viewState.f === 'old' ? s.inactive : !s.inactive);
+  return head('Bienenstände', 'Wo stehen deine Völker? Mit Meldung beim Veterinäramt und Grundstückseigentümer. Die Völkerliste je Stand druckst du für die Meldung.', `<button class="btn" data-act="printStands">${svg('print')} Völkermeldung</button><button class="btn btn-p" data-act="newStand">${svg('plus')} Bienenstand</button>`) +
+  `<div class="tools">${chips('f', [['', 'Aktiv', data.stands.filter(s => !s.inactive).length], ['old', 'Aufgegeben', data.stands.filter(s => s.inactive).length]], viewState.f || '')}</div>
+  ${list.length ? `<div class="grid g2">${list.map(s => { const cs = colsAt(s.id); return `<div class="card pad mcard scard" data-act="editStand:${s.id}"><div style="display:flex;gap:12px;align-items:flex-start"><div class="av gold">${svg('pin')}</div><div class="grow"><h3 style="margin:0">${esc(s.name)}</h3><div class="small muted">${esc([s.kind, s.place].filter(Boolean).join(' · '))}</div></div>${s.vetDate ? pill('gemeldet ' + fmtDate(s.vetDate), 'g') : pill('nicht gemeldet', 'red')}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">${pill(plural(cs.length, 'Volk', 'Völker'), 'gold')}${cs.map(c => `<span class="pill">${qDot(c)} ${esc(c.no)}</span>`).join('')}</div>${s.owner ? `<p class="small muted" style="margin:8px 0 0">Grundstück: ${esc(s.owner)}</p>` : ''}</div>`; }).join('')}</div>` : emptyBox('Noch keine Bienenstände', 'Leg deinen Heimatstand an – z. B. „Garten“.', `<button class="btn btn-p" data-act="newStand">${svg('plus')} Bienenstand</button>`)}
+  <div class="note" style="margin-top:14px">${svg('info')} Jeder Bienenstand muss mit Anzahl der Völker beim zuständigen Veterinäramt gemeldet sein. Bei einer Wanderung in einen anderen Landkreis braucht es vorher ein Gesundheitszeugnis.</div>`;
+};
+function standDef(s) { const isNew = !byId('stands', s.id); return { title: isNew ? 'Neuer Bienenstand' : s.name, fields: () => [
+  { k: 'name', label: 'Name', req: true, ph: 'z. B. Garten, Obstwiese Janssen, Rapsfeld Upende' }, { k: 'kind', label: 'Art', type: 'select', opts: ['Heimstand', 'Außenstand', 'Wanderstand', 'Belegstelle'] },
+  { k: 'place', label: 'Ort / Lage', full: true, ph: 'z. B. Kleiner Weg 5, Osteel – oder Flurstück' }, { k: 'coords', label: 'Koordinaten (optional)', ph: 'z. B. 53.5455, 7.2670' },
+  { k: 'owner', label: 'Grundstückseigentümer/in', ph: 'Name, Telefon' }, { k: 'vetDate', label: 'Beim Veterinäramt gemeldet am', type: 'date' }, { k: 'vetNo', label: 'Registriernummer', ph: 'falls vergeben' },
+  { k: 'trees', label: 'Tracht in der Nähe', full: true, ph: 'z. B. Raps, Obstbäume, Linde, Phacelia' }, { k: 'note', label: 'Notiz', type: 'textarea', full: true }, { k: 'inactive', label: 'Stand aufgegeben', type: 'check' }
+], save: v => { upsert('stands', v); toast('Gespeichert.'); }, del: isNew ? null : async v => { if (data.colonies.some(c => c.stand === v.id)) { toast('Hier stehen noch Völker. Bitte „aufgegeben“ anhaken oder die Völker umsetzen.', { err: true, ms: 6000 }); return false; } removeFrom('stands', v.id); return true; } }; }
+ACTS.newStand = () => openForm(standDef({}), { id: pid(), kind: data.stands.length ? 'Außenstand' : 'Heimstand' });
+ACTS.editStand = id => { const s = byId('stands', id); openForm(standDef(s), s); };
+ACTS.printStands = () => { const c = data.club; printHTML('Völkermeldung', `${letterhead()}<h1>Meldung der Bienenhaltung</h1><p>An: ${esc(c.vetOffice || 'Veterinäramt ________________________')}<br>Stand: ${fmtDate(today())}</p><table><tr><th style="width:30%">Bienenhalter/in</th><td>${esc(c.owner || c.name)}<br>${esc([c.street, [c.zip, c.city].filter(Boolean).join(' ')].filter(Boolean).join(', '))}<br>${esc([c.phone, c.email].filter(Boolean).join(' · '))}</td></tr>${c.register ? `<tr><th>Registriernummer</th><td>${esc(c.register)}</td></tr>` : ''}</table><table><thead><tr><th>Bienenstand</th><th>Lage</th><th class="r">Völker</th><th>Völker-Nr.</th></tr></thead><tbody>${data.stands.filter(s => !s.inactive).map(s => { const cs = colsAt(s.id); return `<tr><td>${esc(s.name)}</td><td>${esc(s.place || '')}${s.coords ? '<br><span class="small">' + esc(s.coords) + '</span>' : ''}</td><td class="r"><b>${cs.length}</b></td><td class="small">${cs.map(x => esc(x.no)).join(', ')}</td></tr>`; }).join('')}</tbody><tfoot><tr><td colspan="2">Völker gesamt</td><td class="r">${activeColonies().length}</td><td></td></tr></tfoot></table><div class="sig"><div>Ort, Datum</div><div>Unterschrift</div></div>`); };
+
+/* =========================================================
+   Varroa & Bestandsbuch, Fütterung, Wanderung
+   ========================================================= */
+VIEWS.health = () => {
+  const y = Number(viewState.y || curYear()), tab = viewState.tab || 'mites';
+  const mites = data.mites.filter(m => yearOf(m.date) === y).sort((a, b) => b.date.localeCompare(a.date)), trs = data.treatments.filter(t => yearOf(t.date) === y).sort((a, b) => b.date.localeCompare(a.date));
+  return head('Varroa & Bestandsbuch', 'Milben zählen, behandeln, dokumentieren. Jede Behandlung steht im Bestandsbuch – das zeigst du dem Veterinäramt oder Bienensachverständigen.', `${yearSel('treatments', y)}<button class="btn" data-act="printBook:${y}">${svg('print')} Bestandsbuch</button><button class="btn" data-act="newMite">${svg('bug')} Varroa zählen</button><button class="btn btn-p" data-act="newTreatment">${svg('plus')} Behandlung</button>`) +
+  (miteAlerts().length ? `<div class="note red" style="margin-bottom:14px">${svg('alert')} <b>Behandeln:</b> ${miteAlerts().map(c => esc(colLabel(c))).join(', ')} – der Milbenbefall liegt über deiner Schwelle (Einstellungen → Regeln).</div>` : '') +
+  `<div class="grid g4" style="margin-bottom:16px">${kpi('Zählungen', fmtNum(mites.length), String(y), 'bug')}${kpi('Über Schwelle', fmtNum(mites.filter(miteHigh).length), `ab ${data.settings.miteLimit} Milben/Tag (Windel)`, 'alert', 'red')}${kpi('Behandlungen', fmtNum(trs.length), `${fmtNum(sum(trs, t => t.colonies.length))} Völker behandelt`, 'shield', 'blue')}${kpi('In Wartezeit', fmtNum(data.treatments.filter(inWait).length), 'kein Honig ernten', 'clock', 'gold')}</div>
+  <div class="tabs">${[['mites', 'Varroa-Zählungen'], ['book', 'Bestandsbuch (Behandlungen)']].map(([k, l]) => `<button data-tab="${k}" class="${tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>` +
+  (tab === 'mites' ? `<div class="card tbl-wrap">${mites.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Volk</th><th class="hm">Methode</th><th class="r">Ergebnis</th><th></th></tr></thead><tbody>${mites.map(m => `<tr class="click" data-open="editMite:${m.id}"><td>${fmtDate(m.date)}</td><td>${esc(colName(m.colony))}</td><td class="hm small">${esc(m.method)}${m.days ? ` · ${m.days} Tage` : ''}</td><td class="r"><b class="${miteHigh(m) ? 'neg' : 'pos'}">${m.method === 'Gemülldiagnose (Windel)' ? fmtNum(mitesPerDay(m), 1) + ' / Tag' : m.count + ' Milben'}</b><span class="sub">${m.method === 'Gemülldiagnose (Windel)' ? m.count + ' gesamt' : ''}</span></td><td>${miteHigh(m) ? pill('behandeln', 'red') : pill('ok', 'g')}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch nicht gezählt', 'Windel unterlegen, nach 3 Tagen Milben zählen – die App rechnet auf Milben pro Tag um.')}</div>
+  <p class="small muted">Richtwerte ändern sich mit der Jahreszeit. Die Schwelle stellst du unter Einstellungen → Regeln ein. Im Zweifel Bienensachverständigen oder Imkerverein fragen.</p>`
+  : `<div class="card tbl-wrap">${trs.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Mittel</th><th class="hm">Völker</th><th class="hm">Menge</th><th class="hm">Charge / Beleg</th><th>Wartezeit</th></tr></thead><tbody>${trs.map(t => `<tr class="click" data-open="editTreatment:${t.id}"><td class="nowrap">${fmtDate(t.date)}${t.dateEnd && t.dateEnd !== t.date ? `<span class="sub">bis ${fmtDate(t.dateEnd)}</span>` : ''}</td><td><b>${esc(t.drug)}</b><span class="sub">${esc(t.active || '')}</span></td><td class="hm small">${esc(t.colonies.map(id => colById(id)?.no).join(', '))}</td><td class="hm small">${esc(t.amount ? t.amount + ' ' + (t.unit || '') + ' je Volk' : '')}</td><td class="hm small">${esc([t.batch && 'Ch. ' + t.batch, t.receipt].filter(Boolean).join(' · '))}</td><td>${t.wait ? (inWait(t) ? pill('bis ' + fmtDate(addDays(t.dateEnd || t.date, num(t.wait))), 'gold') : pill(t.wait + ' Tage', '')) : '–'}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Behandlung in ' + y, '')}</div>`);
+};
+VIEWS.health.after = yearAfter;
+function miteDef(m) { const isNew = !byId('mites', m.id); return { title: isNew ? 'Varroa zählen' : 'Varroa-Zählung', fields: () => [
+  { k: 'colony', label: 'Volk', type: 'select', opts: () => [['', '– bitte wählen –'], ...colonyOpts()], req: true }, { k: 'date', label: 'Datum', type: 'date', req: true },
+  { k: 'method', label: 'Methode', type: 'select', opts: MITE_METHODS }, { k: 'days', label: 'Tage unter der Windel', type: 'number', step: '1', hint: 'Nur bei Gemülldiagnose.' },
+  { k: 'count', label: 'Gezählte Milben', type: 'number', step: '1', req: true }, { k: 'note', label: 'Notiz', full: true }
+], save: v => { v.count = Number(v.count) || 0; v.days = v.days === '' ? '' : Number(v.days); upsert('mites', v); toast(miteHigh(v) ? 'Gespeichert – der Befall ist hoch. Bitte behandeln!' : 'Gespeichert.', { err: miteHigh(v), ms: 5000 }); },
+  del: isNew ? null : async v => { removeFrom('mites', v.id); return true; } }; }
+ACTS.newMite = (cid = '') => { if (topModal()) closeModal(); openForm(miteDef({}), { id: pid(), colony: cid, date: today(), method: 'Gemülldiagnose (Windel)', days: 3 }); };
+ACTS.editMite = id => { const m = byId('mites', id); openForm(miteDef(m), m); };
+function treatmentDef(t) { const isNew = !byId('treatments', t.id); return { title: isNew ? 'Behandlung eintragen' : 'Behandlung ' + fmtDate(t.date), intro: 'Pflichtangaben fürs Bestandsbuch: Datum, Völker, Mittel, Menge, Charge, Bezugsquelle und Wartezeit.', fields: () => [
+  { k: 'date', label: 'Beginn', type: 'date', req: true }, { k: 'dateEnd', label: 'Ende (bei mehrtägiger Behandlung)', type: 'date' },
+  colMulti('colonies', 'Behandelte Völker'), { k: 'drug', label: 'Tierarzneimittel', req: true, list: DRUGS.map(d => d[0]) }, { k: 'active', label: 'Wirkstoff', list: [...new Set(DRUGS.map(d => d[1]).filter(Boolean))] },
+  { k: 'amount', label: 'Menge je Volk', type: 'number', step: '0.1' }, { k: 'unit', label: 'Einheit', type: 'select', opts: ['ml', 'g', 'Streifen', 'Dosen'] },
+  { k: 'method', label: 'Anwendung', list: ['Träufeln', 'Sprühen', 'Verdampfen', 'Verdunster (Langzeit)', 'Verdunster (Kurzzeit)', 'Streifen eingehängt'] }, { k: 'batch', label: 'Chargen-Nr.' },
+  { k: 'receipt', label: 'Bezug / Beleg-Nr.', ph: 'z. B. Apotheke, Tierarzt, Beleg 2026-17' }, { k: 'wait', label: 'Wartezeit (Tage)', type: 'number', step: '1', hint: 'Laut Packungsbeilage. 0 = keine.' },
+  { k: 'by', label: 'Behandelt durch', ph: 'Name' }, { k: 'temp', label: 'Außentemperatur (°C)', type: 'number', step: '1' }, { k: 'note', label: 'Notiz / Erfolg', type: 'textarea', full: true }
+], onOpen: f => { const d = f.elements.drug, a = f.elements.active; d.addEventListener('change', () => { const x = DRUGS.find(z => z[0] === d.value); if (x && x[1] && !a.value) a.value = x[1]; }); },
+validate: v => v.colonies.length ? '' : 'Bitte mindestens ein Volk antippen.',
+save: v => { v.amount = v.amount === '' ? '' : Number(v.amount); v.wait = v.wait === '' ? '' : Number(v.wait); upsert('treatments', v); toast('Im Bestandsbuch eingetragen.'); },
+del: isNew ? null : async v => { if (!await confirmBox('Behandlung aus dem Bestandsbuch löschen?', 'Löschen', true)) return false; removeFrom('treatments', v.id); return true; } }; }
+ACTS.newTreatment = () => openForm(treatmentDef({}), { id: pid(), date: today(), colonies: miteAlerts().map(c => c.id), unit: 'ml', by: data.club.owner || '', wait: 0 });
+ACTS.editTreatment = id => { const t = byId('treatments', id); openForm(treatmentDef(t), t); };
+ACTS.printBook = y => { y = Number(y); const l = data.treatments.filter(t => yearOf(t.date) === y).sort((a, b) => a.date.localeCompare(b.date)), c = data.club; printHTML('Bestandsbuch ' + y, `${letterhead()}<h1>Bestandsbuch über die Anwendung von Tierarzneimitteln ${y}</h1><p>Tierhalter/in: <b>${esc(c.owner || c.name)}</b>, ${esc([c.street, [c.zip, c.city].filter(Boolean).join(' ')].filter(Boolean).join(', '))}${c.register ? ' · Reg.-Nr. ' + esc(c.register) : ''}</p><table><thead><tr><th>Datum</th><th>Völker (Nr.) / Stand</th><th>Arzneimittel / Wirkstoff</th><th>Charge</th><th>Menge je Volk</th><th>Bezug / Beleg</th><th>Wartezeit</th><th>Behandelt durch</th></tr></thead><tbody>${l.map(t => `<tr><td class="nowrap">${fmtDate(t.date)}${t.dateEnd && t.dateEnd !== t.date ? '–' + fmtDate(t.dateEnd) : ''}</td><td>${esc(t.colonies.map(id => colById(id)?.no).join(', '))}<br><span class="small">${esc([...new Set(t.colonies.map(id => standName(colStand(colById(id) || {}, t.date))))].join(', '))}</span></td><td>${esc(t.drug)}<br><span class="small">${esc(t.active || '')}${t.method ? ' · ' + esc(t.method) : ''}</span></td><td>${esc(t.batch || '')}</td><td>${t.amount ? esc(t.amount + ' ' + (t.unit || '')) : ''}</td><td class="small">${esc(t.receipt || '')}</td><td>${t.wait ? t.wait + ' Tage' : '0'}</td><td>${esc(t.by || '')}</td></tr>`).join('') || '<tr><td colspan="8">keine Behandlungen</td></tr>'}</tbody></table><p class="small">Aufzeichnungen und Belege bitte so lange aufbewahren, wie es die geltenden Vorschriften verlangen.</p><div class="sig"><div>Ort, Datum</div><div>Unterschrift Tierhalter/in</div></div>`); };
+
+/* ---------- Fütterung ---------- */
+VIEWS.feeding = () => {
+  const y = Number(viewState.y || curYear()), l = data.feedings.filter(f => yearOf(f.date) === y).sort((a, b) => b.date.localeCompare(a.date));
+  const per = activeColonies().map(c => ({ c, kg: sum(l.filter(f => f.colonies.includes(c.id)), f => feedKg(f)) })).sort((a, b) => String(a.c.no).localeCompare(String(b.c.no), 'de', { numeric: true }));
+  return head('Fütterung', 'Was hat welches Volk bekommen? Die App rechnet Zuckerwasser in Kilo Zucker um – so siehst du, ob die Wintervorräte reichen.', `${yearSel('feedings', y)}<button class="btn btn-p" data-act="newFeeding">${svg('plus')} Fütterung</button>`) +
+  `<div class="grid g2" style="align-items:start"><div class="card tbl-wrap">${l.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Futter</th><th>Völker</th><th class="r">je Volk</th></tr></thead><tbody>${l.map(f => `<tr class="click" data-open="editFeeding:${f.id}"><td>${fmtDate(f.date)}</td><td>${esc(f.kind)}</td><td class="small">${esc(f.colonies.map(id => colById(id)?.no).join(', '))}</td><td class="r">${fmtNum(f.amount, 1)} ${esc(f.unit)}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Fütterung in ' + y, '')}</div>
+  <div class="card pad"><div class="sec-t"><h3>Zucker je Volk ${y}</h3></div>${per.map(p => `<div class="statbar"><span>${esc(colLabel(p.c))}</span><div class="bar ${p.kg >= num(data.settings.winterKg || 15) ? '' : 'gold'}"><i style="width:${Math.min(100, Math.round(p.kg / 25 * 100))}%"></i></div><b>${fmtNum(p.kg, 1)} kg</b></div>`).join('') || '<p class="muted">–</p>'}<p class="small muted">Zuckeranteil: 3:2 = 60 %, 1:1 = 50 %, Sirup ca. 73 %, Futterteig ca. 90 %. Eigener Honig zählt mit 80 %.</p></div></div>`;
+};
+VIEWS.feeding.after = yearAfter;
+const feedKg = f => { const a = num(f.amount), share = { 'Zuckerwasser 3:2': .6, 'Zuckerwasser 1:1': .5, 'Futtersirup': .73, 'Futterteig': .9, 'Honig (eigener)': .8 }[f.kind] || 1; const kg = f.unit === 'l' ? a * (f.kind === 'Futtersirup' ? 1.35 : f.kind.startsWith('Zuckerwasser') ? 1.25 : 1) : a; return r2(kg * share); };
+function feedingDef(f) { const isNew = !byId('feedings', f.id); return { title: isNew ? 'Fütterung' : 'Fütterung ' + fmtDate(f.date), fields: () => [{ k: 'date', label: 'Datum', type: 'date', req: true }, { k: 'kind', label: 'Futter', type: 'select', opts: FEED_KINDS }, { k: 'amount', label: 'Menge je Volk', type: 'number', step: '0.1', req: true }, { k: 'unit', label: 'Einheit', type: 'select', opts: ['l', 'kg'] }, colMulti('colonies', 'Gefütterte Völker'), { k: 'note', label: 'Notiz', full: true }],
+  validate: v => v.colonies.length ? '' : 'Bitte Völker antippen.', save: v => { v.amount = Number(v.amount) || 0; upsert('feedings', v); toast('Fütterung gespeichert.'); }, del: isNew ? null : async v => { removeFrom('feedings', v.id); return true; } }; }
+ACTS.newFeeding = () => openForm(feedingDef({}), { id: pid(), date: today(), kind: 'Futtersirup', unit: 'kg', amount: 5, colonies: activeColonies().map(c => c.id) });
+ACTS.editFeeding = id => { const f = byId('feedings', id); openForm(feedingDef(f), f); };
+
+/* ---------- Wanderung ---------- */
+VIEWS.moves = () => {
+  const l = [...data.moves].sort((a, b) => b.date.localeCompare(a.date));
+  return head('Wanderung', 'Völker in die Tracht bringen – mit Gesundheitszeugnis und Meldung am neuen Standort. Während der Wanderung zählt der Wanderstand als Standort.', `<button class="btn btn-p" data-act="newMove">${svg('plus')} Wanderung</button>`) +
+  `<div class="note" style="margin-bottom:14px">${svg('info')} Für eine Wanderung in einen anderen Landkreis brauchst du vorher ein Gesundheitszeugnis vom Veterinäramt (Futterkranzprobe über Bienensachverständige). Rechtzeitig beantragen – das dauert mehrere Wochen.</div>
+  <div class="card tbl-wrap">${l.length ? `<table class="tbl"><thead><tr><th>Ab</th><th>Wohin</th><th>Völker</th><th class="hm">Gesundheitszeugnis</th><th>Zurück</th></tr></thead><tbody>${l.map(m => `<tr class="click" data-open="editMove:${m.id}"><td>${fmtDate(m.date)}</td><td><b>${esc(standName(m.to))}</b><span class="sub">${esc(m.trach || '')}</span></td><td class="small">${esc(m.colonies.map(id => colById(id)?.no).join(', '))}</td><td class="hm">${m.certDate ? `${fmtDate(m.certDate)}${m.certNo ? `<span class="sub">${esc(m.certNo)}</span>` : ''}` : m.certNeeded ? pill('fehlt', 'red') : '<span class="muted">nicht nötig</span>'}</td><td>${m.back ? fmtDate(m.back) : `${m.until ? 'geplant ' + fmtDate(m.until) : ''} <button class="btn btn-sm" data-act="moveBack:${m.id}">Zurück</button>`}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Wanderung', 'Zuerst unter Bienenstände einen Wanderstand anlegen.')}</div>`;
+};
+function moveDef(m) { const isNew = !byId('moves', m.id); return { title: isNew ? 'Wanderung' : 'Wanderung ' + fmtDate(m.date), fields: () => [
+  { k: 'date', label: 'Aufgestellt am', type: 'date', req: true }, { k: 'to', label: 'Wanderstand', type: 'select', opts: () => standOpts(), req: true }, colMulti('colonies', 'Völker'),
+  { k: 'trach', label: 'Tracht', list: ['Raps', 'Obstblüte', 'Robinie', 'Linde', 'Phacelia', 'Sonnenblume', 'Heide', 'Wald'] }, { k: 'until', label: 'Geplant zurück', type: 'date' }, { k: 'back', label: 'Zurück am', type: 'date' },
+  { k: 'certNeeded', label: 'Anderer Landkreis – Gesundheitszeugnis nötig', type: 'check' }, { k: 'certDate', label: 'Gesundheitszeugnis vom', type: 'date' }, { k: 'certNo', label: 'Aktenzeichen / Nr.' },
+  { k: 'reported', label: 'Am neuen Standort gemeldet', type: 'check' }, { k: 'note', label: 'Notiz', full: true }
+], validate: v => v.colonies.length ? (v.back && v.back < v.date ? 'Rückkehr liegt vor dem Aufstellen.' : '') : 'Bitte Völker antippen.', save: v => { upsert('moves', v); toast('Wanderung gespeichert.'); }, del: isNew ? null : async v => { removeFrom('moves', v.id); return true; } }; }
+ACTS.newMove = () => openForm(moveDef({}), { id: pid(), date: today(), to: data.stands.find(s => s.kind === 'Wanderstand')?.id || '', colonies: [], until: addDays(today(), 28) });
+ACTS.editMove = id => { const m = byId('moves', id); openForm(moveDef(m), m); };
+ACTS.moveBack = id => { const m = byId('moves', id); m.back = today(); upsert('moves', m); render(); toast('Völker wieder am Heimatstand.'); };
+
+/* =========================================================
+   Ernte, Abfüllung & Etiketten, Verkauf, Kunden, Aufgaben, Kasse
+   ========================================================= */
+VIEWS.harvests = () => {
+  const y = Number(viewState.y || curYear()), l = data.harvests.filter(h => yearOf(h.date) === y).sort((a, b) => b.date.localeCompare(a.date));
+  const bySort = SORTS.map(s => [s, sum(l.filter(h => h.sort === s), h => h.kg)]).filter(x => x[1]), max = Math.max(1, ...bySort.map(x => x[1]));
+  return head('Honigernte', 'Jede Schleuderung mit Sorte, Menge, Wassergehalt und Völkern. Daraus wird später abgefüllt.', `${yearSel('harvests', y)}<button class="btn btn-p" data-act="newHarvest">${svg('plus')} Ernte</button>`) +
+  `<div class="grid g4" style="margin-bottom:16px">${kpi('Ernte ' + y, fmtNum(sum(l, h => h.kg), 1) + ' kg', `${l.length} Schleuderungen`, 'honey')}${kpi('Je Volk', activeColonies().length ? fmtNum(sum(l, h => h.kg) / activeColonies().length, 1) + ' kg' : '–', 'Durchschnitt', 'hive', 'gold')}${kpi('Abgefüllt', fmtNum(sum(data.batches.filter(b => yearOf(b.date) === y), b => num(b.jars) * num(b.size) / 1000), 1) + ' kg', 'aus allen Losen', 'jar', 'blue')}${kpi('Wasser Ø', l.filter(h => h.water).length ? fmtNum(sum(l.filter(h => h.water), h => h.water) / l.filter(h => h.water).length, 1) + ' %' : '–', 'unter 18 % ist gut', 'drop')}</div>
+  <div class="grid g2" style="align-items:start"><div class="card tbl-wrap">${l.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Sorte</th><th class="r">kg</th><th class="r">Wasser</th><th class="hm">Völker</th></tr></thead><tbody>${l.map(h => `<tr class="click" data-open="editHarvest:${h.id}"><td>${fmtDate(h.date)}</td><td><b>${esc(h.sort)}</b>${h.stand ? `<span class="sub">${esc(standName(h.stand))}</span>` : ''}</td><td class="r">${fmtNum(h.kg, 1)}</td><td class="r"><span class="${num(h.water) > 18 ? 'neg' : ''}">${h.water ? fmtNum(h.water, 1) + ' %' : ''}</span></td><td class="hm small">${esc(h.colonies.map(id => colById(id)?.no).join(', '))}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Ernte in ' + y, '')}</div>
+  <div class="card pad"><div class="sec-t"><h3>Nach Sorte</h3></div>${bySort.map(([s, k]) => `<div class="statbar"><span>${esc(s)}</span><div class="bar gold"><i style="width:${Math.round(k / max * 100)}%"></i></div><b>${fmtNum(k)} kg</b></div>`).join('') || '<p class="muted">–</p>'}</div></div>`;
+};
+VIEWS.harvests.after = yearAfter;
+function harvestDef(h) { const isNew = !byId('harvests', h.id); return { title: isNew ? 'Honigernte' : 'Ernte ' + fmtDate(h.date), fields: () => [
+  { k: 'date', label: 'Geschleudert am', type: 'date', req: true }, { k: 'sort', label: 'Sorte / Tracht', type: 'select', opts: SORTS }, { k: 'kg', label: 'Menge (kg)', type: 'number', step: '0.1', req: true },
+  { k: 'water', label: 'Wassergehalt (%)', type: 'number', step: '0.1', hint: 'Mit dem Refraktometer gemessen.' }, { k: 'stand', label: 'Stand', type: 'select', opts: () => standOpts('– mehrere –') }, colMulti('colonies', 'Völker', true),
+  { k: 'combs', label: 'Honigwaben', type: 'number', step: '1' }, { k: 'note', label: 'Notiz', full: true }
+], validate: v => data.treatments.some(t => inWaitOn(t, v.date) && t.colonies.some(c => v.colonies.includes(c))) ? 'Achtung: Für mindestens eines der Völker läuft an diesem Tag noch eine Wartezeit!' : '',
+save: v => { v.kg = Number(v.kg) || 0; v.water = v.water === '' ? '' : Number(v.water); upsert('harvests', v); toast(num(v.water) > 18 ? 'Gespeichert – Wassergehalt über 18 %: bitte nachtrocknen lassen.' : 'Ernte gespeichert.'); }, del: isNew ? null : async v => { removeFrom('harvests', v.id); return true; } }; }
+const inWaitOn = (t, d) => t.wait && d >= t.date && d <= addDays(t.dateEnd || t.date, num(t.wait));
+ACTS.newHarvest = () => openForm(harvestDef({}), { id: pid(), date: today(), sort: Number(today().slice(5, 7)) <= 6 ? 'Frühtracht' : 'Sommertracht', colonies: [] });
+ACTS.editHarvest = id => { const h = byId('harvests', id); openForm(harvestDef(h), h); };
+
+/* ---------- Abfüllung, Lose, Etiketten ---------- */
+VIEWS.batches = () => {
+  const f = viewState.f || 'stock', l = data.batches.filter(b => f === 'all' || batchStock(b) > 0).sort((a, b) => b.date.localeCompare(a.date));
+  return head('Abfüllung & Etiketten', 'Jede Abfüllung bekommt eine Losnummer. Daraus druckst du Etiketten mit allen Pflichtangaben – und siehst, wie viele Gläser noch da sind.', `<button class="btn" data-act="printStock">${svg('print')} Lagerliste</button><button class="btn btn-p" data-act="newBatch">${svg('plus')} Abfüllung</button>`) +
+  `<div class="grid g4" style="margin-bottom:16px">${[500, 250, 30].map(s => kpi(`${s} g Gläser`, fmtNum(sum(data.batches.filter(b => num(b.size) === s), batchStock)), 'im Lager', 'jar', s === 500 ? '' : s === 250 ? 'gold' : 'blue')).join('')}${kpi('Lagerwert', fmtMoney(sum(data.batches, b => batchStock(b) * num(b.price))), 'zu Verkaufspreisen', 'euro', 'red')}</div>
+  <div class="tools">${chips('f', [['stock', 'Mit Bestand', data.batches.filter(b => batchStock(b) > 0).length], ['all', 'Alle Lose', data.batches.length]], f)}</div>
+  <div class="card tbl-wrap">${l.length ? `<table class="tbl"><thead><tr><th>Los</th><th>Honig</th><th class="r">Glas</th><th class="r">Abgefüllt</th><th class="r">Bestand</th><th class="hm">MHD</th><th></th></tr></thead><tbody>${l.map(b => `<tr class="click" data-open="editBatch:${b.id}"><td><b>${esc(b.lot)}</b><span class="sub">${fmtDate(b.date)}</span></td><td>${esc(b.sort)}<span class="sub">${esc(b.texture || '')}</span></td><td class="r">${b.size} g<span class="sub">${fmtMoney(b.price)}</span></td><td class="r">${b.jars}</td><td class="r"><b class="${batchStock(b) <= num(data.settings.lowStock) ? 'warnc' : ''}">${batchStock(b)}</b></td><td class="hm">${esc(mhdText(b))}</td><td class="r"><button class="btn btn-sm" data-act="labels:${b.id}">${svg('print')} Etiketten</button></td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Abfüllung', 'Nach dem Schleudern: Abfüllung anlegen, Etiketten drucken, verkaufen.')}</div>
+  <div class="note" style="margin-top:14px">${svg('info')} Pflicht auf dem Glas: Bezeichnung (z. B. „Blütenhonig“), Nettofüllmenge, Name und Anschrift, Ursprungsland, Mindesthaltbarkeit und – wenn das MHD nur Monat/Jahr nennt – die Losnummer. Bitte Etiketten einmal mit den Vorgaben deines Imkerverbands abgleichen.</div>`;
+};
+const mhdText = b => { if (!b.mhd) return ''; const [y, m] = b.mhd.split('-'); return `Ende ${MONTHS[Number(m) - 1]} ${y}`; };
+function batchDef(b) { const isNew = !byId('batches', b.id); return { title: isNew ? 'Neue Abfüllung' : 'Los ' + b.lot, fields: () => [
+  { k: 'date', label: 'Abgefüllt am', type: 'date', req: true }, { k: 'lot', label: 'Losnummer', req: true, hint: 'Wird vorgeschlagen, z. B. L 2026-03.' },
+  { k: 'sort', label: 'Bezeichnung auf dem Etikett', type: 'select', opts: SORTS.filter(s => s !== 'Sonstiger').concat(['Honig']) }, { k: 'texture', label: 'Beschaffenheit', type: 'select', opts: ['', 'flüssig', 'cremig gerührt', 'fest', 'mit Wabe'] },
+  { k: 'size', label: 'Glasgröße (g)', type: 'select', opts: [['500', '500 g'], ['250', '250 g'], ['30', '30 g (Probierglas)'], ['1000', '1 kg']] }, { k: 'jars', label: 'Anzahl Gläser', type: 'number', step: '1', req: true },
+  { k: 'mhd', label: 'Mindestens haltbar bis Ende (Monat)', type: 'month', hint: 'Vorschlag: Abfülldatum + Monate aus den Einstellungen.' }, { k: 'price', label: 'Verkaufspreis je Glas (€)', type: 'money' },
+  { k: 'harvests', label: 'Aus diesen Ernten', type: 'multi', opts: () => data.harvests.sort((a, z) => z.date.localeCompare(a.date)).slice(0, 20).map(h => [h.id, `${fmtDate(h.date)} ${h.sort} ${fmtNum(h.kg)} kg`]) },
+  { k: 'seal', label: 'Glas des Imkerbunds / Gewährverschluss', type: 'check' }, { k: 'note', label: 'Notiz', full: true }
+], onOpen: f => { const sz = f.elements.size, p = f.elements.price; sz.onchange = () => { p.value = fmtNum(num(data.settings['price' + sz.value]), 2); }; },
+save: v => { v.size = Number(v.size); v.jars = Number(v.jars) || 0; upsert('batches', v); toast(`Los ${v.lot} gespeichert – jetzt Etiketten drucken.`); },
+del: isNew ? null : async v => { if (data.sales.some(s => s.batch === v.id)) { toast('Aus diesem Los wurde schon verkauft.', { err: true }); return false; } removeFrom('batches', v.id); return true; } }; }
+ACTS.newBatch = () => { const d = today(), n = data.batches.filter(b => yearOf(b.date) === curYear()).length + 1, m = addMonths(d, num(data.settings.mhdMonths) || 24).slice(0, 7); openForm(batchDef({}), { id: pid(), date: d, lot: `L ${curYear()}-${pad2(n)}`, sort: data.harvests.sort((a, b) => b.date.localeCompare(a.date))[0]?.sort || 'Blütenhonig', texture: 'cremig gerührt', size: '500', jars: '', mhd: m, price: num(data.settings.price500), harvests: [] }); };
+ACTS.editBatch = id => { const b = byId('batches', id); const m = openForm(batchDef(b), { ...b, size: String(b.size) }); $('.modal-f', m).insertAdjacentHTML('afterbegin', `<button class="btn l" data-act="labels:${b.id}">${svg('print')} Etiketten</button>`); };
+ACTS.labels = id => {
+  if (topModal()) closeModal(); const b = byId('batches', id), c = data.club, s = data.settings;
+  const md = openModal({ title: 'Etiketten drucken – ' + esc(b.lot), body: `<div class="fg"><div class="f"><label>Anzahl Etiketten</label><input id="lbN" type="number" value="${Math.min(24, batchStock(b) || 12)}"></div><div class="f"><label>Größe</label><select id="lbS"><option value="3">3 je Reihe (groß)</option><option value="4">4 je Reihe (klein)</option></select></div><div class="f check full"><input type="checkbox" id="lbP"><label for="lbP">Preis mit aufdrucken</label></div></div><p class="small muted">Gedruckt wird auf normales A4-Papier oder Etikettenbogen. Vorschau im Druckfenster.</p>`, foot: `<button class="btn" data-close>Abbrechen</button><button class="btn btn-p" id="lbOk">${svg('print')} Drucken</button>` });
+  $('#lbOk', md).onclick = () => {
+    const n = Math.max(1, Math.min(200, Number($('#lbN', md).value) || 12)), cols = Number($('#lbS', md).value), withP = $('#lbP', md).checked; closeModal();
+    const one = `<div class="lab"><div class="ln">${esc(c.name || 'Imkerei')}</div><div class="ls">${esc(b.sort)}</div>${b.texture && b.texture !== 'flüssig' ? `<div class="lt">${esc(b.texture)}</div>` : ''}<div class="lw">${b.size >= 1000 ? fmtNum(b.size / 1000) + ' kg' : b.size + ' g'}</div><div class="lo">Ursprung: ${esc(s.origin || 'Deutschland')}</div><div class="lm">Mindestens haltbar bis: ${esc(mhdText(b))}<br>${esc(b.lot)}</div><div class="la">${esc([c.owner || c.name, c.street, [c.zip, c.city].filter(Boolean).join(' ')].filter(Boolean).join(' · '))}</div><div class="lx">${esc(s.storage || '')}</div>${withP ? `<div class="lp">${fmtMoney(b.price)} <small>(${fmtMoney(b.price / b.size * 1000)} / kg)</small></div>` : ''}</div>`;
+    printHTML('Etiketten ' + b.lot, `<style>@page{margin:8mm}.labs{display:grid;grid-template-columns:repeat(${cols},1fr);gap:3mm}.lab{border:.3mm dashed #bbb;border-radius:2mm;padding:3mm;text-align:center;break-inside:avoid;font-size:${cols === 3 ? 8 : 7}pt;line-height:1.3}.ln{font-weight:800;font-size:1.25em;color:#6b4210}.ls{font-weight:800;font-size:1.9em;margin:1mm 0;color:#111}.lt{font-style:italic}.lw{font-weight:800;font-size:1.4em;margin:1mm 0}.lo,.lm,.la,.lx{font-size:.92em}.la{margin-top:1mm;color:#333}.lx{color:#555}.lp{font-weight:800;font-size:1.3em;margin-top:1mm}.lp small{font-weight:400;font-size:.65em}</style><div class="labs">${Array.from({ length: n }, () => one).join('')}</div>`);
+  };
+};
+ACTS.printStock = () => { const l = data.batches.filter(b => batchStock(b) > 0).sort((a, b) => a.lot.localeCompare(b.lot)); printHTML('Lagerliste', `${letterhead()}<h1>Honiglager</h1><p>Stand ${fmtDate(today())}</p><table><thead><tr><th>Los</th><th>Honig</th><th>Glas</th><th class="r">Bestand</th><th>MHD</th><th class="r">Preis</th><th class="r">Wert</th></tr></thead><tbody>${l.map(b => `<tr><td>${esc(b.lot)}</td><td>${esc(b.sort)} ${esc(b.texture || '')}</td><td>${b.size} g</td><td class="r">${batchStock(b)}</td><td>${esc(mhdText(b))}</td><td class="r">${fmtMoney(b.price)}</td><td class="r">${fmtMoney(batchStock(b) * num(b.price))}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">Summe</td><td class="r">${sum(l, batchStock)}</td><td></td><td></td><td class="r">${fmtMoney(sum(l, b => batchStock(b) * num(b.price)))}</td></tr></tfoot></table>`); };
+
+/* ---------- Verkauf ---------- */
+VIEWS.sales = () => {
+  const y = Number(viewState.y || curYear()), f = viewState.f || '', q = viewState.q || '';
+  const all = data.sales.filter(s => yearOf(s.date) === y), l = all.filter(s => (!f || (f === 'open' ? !s.paid : s.paid)) && matchQ(q, s.customer, memberLabel(s.member), byId('batches', s.batch)?.sort)).sort((a, b) => b.date.localeCompare(a.date));
+  return head('Verkauf', 'Glas für Glas oder an Wiederverkäufer. Bestand und Kasse laufen automatisch mit. Auf Wunsch mit Quittung.', `${yearSel('sales', y)}<button class="btn btn-p" data-act="newSale">${svg('plus')} Verkauf</button>`) +
+  `<div class="grid g4" style="margin-bottom:16px">${kpi('Umsatz ' + y, fmtMoney(sum(all, s => num(s.qty) * num(s.price))), `${fmtNum(sum(all, s => s.qty))} Gläser`, 'euro')}${kpi('Offen', fmtMoney(sum(all.filter(s => !s.paid), s => num(s.qty) * num(s.price))), `${all.filter(s => !s.paid).length} Verkäufe`, 'alert', 'red')}${kpi('Kunden', fmtNum(new Set(all.map(s => s.member || s.customer)).size), 'verschiedene', 'users', 'blue')}${kpi('Honig verkauft', fmtNum(sum(all, s => num(s.qty) * num(byId('batches', s.batch)?.size) / 1000), 1) + ' kg', '', 'honey', 'gold')}</div>
+  <div class="tools">${searchBox(q, 'Kunde, Sorte …')}${chips('f', [['', 'Alle', all.length], ['open', 'Offen', all.filter(s => !s.paid).length], ['paid', 'Bezahlt', all.filter(s => s.paid).length]], f)}</div>
+  <div class="card tbl-wrap">${l.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Kunde</th><th>Honig</th><th class="r">Gläser</th><th class="r">Betrag</th><th></th></tr></thead><tbody>${l.map(s => { const b = byId('batches', s.batch); return `<tr class="click" data-open="editSale:${s.id}"><td>${fmtDate(s.date)}</td><td>${esc(memberLabel(s.member) || s.customer || 'Barverkauf')}</td><td>${esc(b ? `${b.sort} ${b.size} g` : '')}<span class="sub">${esc(b?.lot || '')}</span></td><td class="r">${s.qty}</td><td class="r"><b>${fmtMoney(num(s.qty) * num(s.price))}</b></td><td class="r nowrap">${s.paid ? pill('bezahlt', 'g') : `<button class="btn btn-sm" data-act="salePaid:${s.id}">${svg('check')} Bezahlt</button>`} <button class="btn btn-sm" data-act="printReceipt:${s.id}" title="Quittung">${svg('print')}</button></td></tr>`; }).join('')}</tbody></table>` : emptyBox('Noch keine Verkäufe in ' + y, '')}</div>`;
+};
+VIEWS.sales.after = yearAfter;
+function saleDef(s) { const isNew = !byId('sales', s.id); return { title: isNew ? 'Verkauf' : 'Verkauf ' + fmtDate(s.date), fields: () => [
+  { k: 'date', label: 'Datum', type: 'date', req: true }, { k: 'batch', label: 'Honig (Los)', type: 'select', opts: () => [['', '– bitte wählen –'], ...data.batches.filter(b => batchStock(b) > 0 || b.id === s.batch).map(b => [b.id, `${b.sort} ${b.size} g · ${b.lot} · noch ${batchStock(b)}`])], req: true },
+  { k: 'qty', label: 'Gläser', type: 'number', step: '1', req: true }, { k: 'price', label: 'Preis je Glas (€)', type: 'money' },
+  { k: 'member', label: 'Stammkunde', type: 'member', filter: () => true }, { k: 'customer', label: 'oder Name', ph: 'leer = Barverkauf' },
+  { k: 'paid', label: 'Bezahlt', type: 'check' }, { k: 'note', label: 'Notiz', full: true }
+], onOpen: f => { const b = f.elements.batch, p = f.elements.price; b.onchange = () => { const x = byId('batches', b.value); if (x) p.value = fmtNum(num(x.price), 2); }; },
+validate: v => { const b = byId('batches', v.batch); const before = byId('sales', v.id)?.qty || 0; return b && num(v.qty) > batchStock(b) + num(before) ? `Nur noch ${batchStock(b) + num(before)} Gläser in diesem Los.` : ''; },
+save: v => { v.qty = Number(v.qty) || 0; upsert('sales', v); syncSale(v); toast('Verkauf gespeichert.'); },
+del: isNew ? null : async v => { if (!await confirmBox('Verkauf löschen? Der Bestand wird wieder gutgeschrieben.', 'Löschen', true)) return false; syncBooking('sale:' + v.id, false); removeFrom('sales', v.id); return true; } }; }
+function syncSale(v) { const b = byId('batches', v.batch); syncBooking('sale:' + v.id, v.paid, { date: v.paidDate || v.date, type: 'in', cat: 'Honigverkauf', amount: num(v.qty) * num(v.price), text: `${v.qty} × ${b?.sort || 'Honig'} ${b?.size || ''} g – ${memberLabel(v.member) || v.customer || 'Barverkauf'}` }); }
+ACTS.newSale = () => { const b = data.batches.filter(x => batchStock(x) > 0).sort((a, z) => z.date.localeCompare(a.date))[0]; openForm(saleDef({}), { id: pid(), date: today(), batch: b?.id || '', qty: 1, price: num(b?.price), paid: true }); };
+ACTS.editSale = id => { const s = byId('sales', id); openForm(saleDef(s), s); };
+ACTS.salePaid = id => { const s = byId('sales', id); s.paid = true; s.paidDate = today(); upsert('sales', s); syncSale(s); render(); toast('Als bezahlt gebucht.'); };
+ACTS.printReceipt = id => { const s = byId('sales', id), b = byId('batches', s.batch), c = data.club, tot = num(s.qty) * num(s.price); printHTML('Quittung', `${letterhead()}<h1>Quittung</h1><p>Datum: ${fmtDate(s.date)}</p>${s.member || s.customer ? `<p>Kunde: <b>${esc(memberLabel(s.member) || s.customer)}</b></p>` : ''}<table><thead><tr><th>Artikel</th><th class="r">Menge</th><th class="r">Einzelpreis</th><th class="r">Betrag</th></tr></thead><tbody><tr><td>${esc(b?.sort || 'Honig')} ${b?.size || ''} g${b?.texture ? ', ' + esc(b.texture) : ''}<br><span class="small">Los ${esc(b?.lot || '')}</span></td><td class="r">${s.qty}</td><td class="r">${fmtMoney(s.price)}</td><td class="r">${fmtMoney(tot)}</td></tr></tbody><tfoot><tr><td colspan="3">Gesamt</td><td class="r">${fmtMoney(tot)}</td></tr></tfoot></table><p class="small">${c.vatNote || 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.'}</p><p>${s.paid ? 'Betrag dankend erhalten.' : 'Bitte überweisen' + (c.iban ? ' an IBAN ' + esc(fmtIban(c.iban)) : '') + '.'}</p><div class="sig"><div>Ort, Datum</div><div>Unterschrift</div></div>`); };
+
+/* ---------- Kunden ---------- */
+VIEWS.members = () => {
+  const q = viewState.q || '', y = curYear();
+  const list = data.members.filter(m => matchQ(q, fullName(m), m.city, m.phone, m.note)).sort((a, b) => sortName(a).localeCompare(sortName(b)));
+  return head('Kunden', 'Stammkunden und Wiederverkäufer – mit allem, was sie gekauft haben.', `<button class="btn btn-p" data-act="newMember">${svg('plus')} Kunde</button>`) +
+  `<div class="tools">${searchBox(q, 'Name, Ort …')}</div><div class="card tbl-wrap">${list.length ? `<table class="tbl"><thead><tr><th>Name</th><th class="hm">Kontakt</th><th class="r">Gläser ${y}</th><th class="r">Umsatz ${y}</th></tr></thead><tbody>${list.map(m => { const s = data.sales.filter(x => x.member === m.id && yearOf(x.date) === y); return `<tr class="click" data-open="editMember:${m.id}"><td><b>${esc(fullName(m))}</b><span class="sub">${esc(m.kind || '')}</span></td><td class="hm small">${esc([m.phone, m.email, m.city].filter(Boolean).join(' · '))}</td><td class="r">${sum(s, x => x.qty)}</td><td class="r">${fmtMoney(sum(s, x => num(x.qty) * num(x.price)))}</td></tr>`; }).join('')}</tbody></table>` : emptyBox('Noch keine Kunden', 'Stammkunden anlegen – dann siehst du, wer was kauft.')}</div>`;
+};
+function memberDef(m) { const isNew = !byId('members', m.id); return { title: isNew ? 'Neuer Kunde' : fullName(m), fields: () => [{ k: 'first', label: 'Vorname' }, { k: 'last', label: 'Nachname / Firma', req: true }, { k: 'kind', label: 'Art', type: 'select', opts: ['Privat', 'Wiederverkäufer / Hofladen', 'Gastronomie', 'Firma'] }, { k: 'phone', label: 'Telefon', type: 'tel' }, { k: 'email', label: 'E-Mail', type: 'email' }, { k: 'street', label: 'Straße', full: true }, { k: 'zip', label: 'PLZ' }, { k: 'city', label: 'Ort' }, { k: 'note', label: 'Notiz (Lieblingssorte …)', type: 'textarea', full: true }], save: v => { upsert('members', v); toast('Gespeichert.'); }, del: isNew ? null : async v => { if (data.sales.some(s => s.member === v.id)) { toast('Dieser Kunde hat Verkäufe.', { err: true }); return false; } removeFrom('members', v.id); return true; } }; }
+ACTS.newMember = () => openForm(memberDef({}), { id: pid(), kind: 'Privat' });
+ACTS.editMember = id => { const m = byId('members', id); openForm(memberDef(m), m); };
+
+/* ---------- Aufgaben ---------- */
+VIEWS.tasks = () => {
+  const f = viewState.f || 'open', l = data.tasks.filter(t => f === 'open' ? !t.done : t.done).sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
+  return head('Aufgaben', 'Was am Bienenstand oder in der Honigküche zu tun ist.', `<button class="btn btn-p" data-act="newTask">${svg('plus')} Aufgabe</button>`) +
+  `<div class="tools">${chips('f', [['open', 'Offen', data.tasks.filter(t => !t.done).length], ['done', 'Erledigt', data.tasks.filter(t => t.done).length]], f)}</div>
+  <div class="card pad">${l.length ? `<div class="list">${l.map(t => `<div class="li"><button class="okb ${t.done ? 'on' : ''}" data-act="taskToggle:${t.id}" aria-label="Erledigt">${t.done ? svg('check') : ''}</button><div class="grow" style="cursor:pointer" data-act="editTask:${t.id}"><b>${esc(t.title)}</b><div class="small muted">${[t.colony && colName(t.colony), t.due && 'bis ' + fmtDate(t.due)].filter(Boolean).map(esc).join(' · ')}</div></div>${!t.done && t.due && t.due < today() ? pill('überfällig', 'red') : ''}</div>`).join('')}</div>` : emptyBox(f === 'open' ? 'Nichts zu tun 🐝' : 'Noch nichts erledigt', '')}</div>`;
+};
+function taskDef(t) { const isNew = !byId('tasks', t.id); return { title: isNew ? 'Neue Aufgabe' : 'Aufgabe', fields: () => [{ k: 'title', label: 'Was ist zu tun?', req: true, full: true }, { k: 'colony', label: 'Volk (optional)', type: 'select', opts: () => [['', '–'], ...colonyOpts()] }, { k: 'due', label: 'Bis wann', type: 'date' }, { k: 'done', label: 'Erledigt', type: 'check' }, { k: 'note', label: 'Notiz', type: 'textarea', full: true }], save: v => { upsert('tasks', v); toast('Gespeichert.'); }, del: isNew ? null : async v => { removeFrom('tasks', v.id); return true; } }; }
+ACTS.newTask = () => openForm(taskDef({}), { id: pid(), done: false });
+ACTS.editTask = id => { const t = byId('tasks', id); openForm(taskDef(t), t); };
+ACTS.taskToggle = id => { const t = byId('tasks', id); t.done = !t.done; upsert('tasks', t); render(); };
+
+/* ---------- Kasse ---------- */
+VIEWS.cash = () => {
+  const y = Number(viewState.y || curYear()), tab = viewState.tab || 'book', q = viewState.q || '';
+  const bs = data.bookings.filter(b => yearOf(b.date) === y), ins = sum(bs.filter(b => b.type === 'in'), b => b.amount), outs = sum(bs.filter(b => b.type === 'out'), b => b.amount);
+  return head('Kasse', 'Einnahmen und Ausgaben deiner Imkerei – Honigverkäufe bucht die App selbst. Mit Jahresübersicht für die Steuer.', `${yearSel('bookings', y)}<button class="btn" data-act="newBookingIn">${svg('plus')} Einnahme</button><button class="btn btn-p" data-act="newBookingOut">${svg('plus')} Ausgabe</button>`) +
+  `<div class="grid g4" style="margin-bottom:16px">${kpi('Einnahmen', fmtMoney(ins), String(y), 'euro')}${kpi('Ausgaben', fmtMoney(outs), 'davon Futter ' + fmtMoney(sum(bs.filter(b => b.cat === 'Futter / Zucker'), b => b.amount)), 'bank', 'red')}${kpi('Ergebnis', `<span class="${ins - outs < 0 ? 'neg' : 'pos'}">${fmtMoney(ins - outs)}</span>`, 'Einnahmen minus Ausgaben', 'chart', 'blue')}${kpi('Je Volk', activeColonies().length ? fmtMoney((ins - outs) / activeColonies().length) : '–', 'Ergebnis pro Volk', 'hive', 'gold')}</div>
+  <div class="tabs">${[['book', 'Buchungen'], ['cats', 'Nach Bereich']].map(([k, l]) => `<button data-tab="${k}" class="${tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>` +
+  (tab === 'book' ? `<div class="tools">${searchBox(q, 'Text, Bereich …')}${moreBtn([['exportCash:' + y, 'Als Excel-Liste'], ['printCash:' + y, 'Jahresübersicht drucken']])}</div><div class="card tbl-wrap">${bs.length ? `<table class="tbl"><thead><tr><th>Datum</th><th>Text</th><th class="hm">Bereich</th><th class="r">Betrag</th></tr></thead><tbody>${bs.filter(b => matchQ(q, b.text, b.cat)).sort((a, b) => b.date.localeCompare(a.date)).map(b => `<tr class="click" data-open="editBooking:${b.id}"><td class="nowrap">${fmtDate(b.date)}</td><td>${esc(b.text)}${b.src ? '<span class="sub">automatisch</span>' : ''}</td><td class="hm small">${esc(b.cat)}</td><td class="r">${amt(bookingAmount(b), true)}</td></tr>`).join('')}</tbody></table>` : emptyBox('Noch keine Buchungen', '')}</div>` : catTable(bs));
+};
+VIEWS.cash.after = yearAfter;
+function catTable(bs) {
+  const rows = t => [...new Set(bs.filter(b => b.type === t).map(b => b.cat))].map(c => [c, sum(bs.filter(b => b.type === t && b.cat === c), b => b.amount)]).sort((a, b) => b[1] - a[1]);
+  const tb = (t, l) => { const r = rows(t), tot = sum(r, x => x[1]); return `<div class="card pad"><div class="sec-t"><h3>${l}</h3><b>${fmtMoney(tot)}</b></div>${r.length ? r.map(([c, v]) => `<div style="margin:9px 0"><div style="display:flex;justify-content:space-between;font-size:14px"><span>${esc(c)}</span><b>${fmtMoney(v)}</b></div><div class="bar ${t === 'out' ? 'gold' : ''}"><i style="width:${tot ? Math.round(v / tot * 100) : 0}%"></i></div></div>`).join('') : '<p class="muted">–</p>'}</div>`; };
+  return `<div class="grid g2">${tb('in', 'Einnahmen')}${tb('out', 'Ausgaben')}</div>`;
+}
+function bookingDef(b) { const isNew = !byId('bookings', b.id); return { title: isNew ? (b.type === 'in' ? 'Neue Einnahme' : 'Neue Ausgabe') : 'Buchung', intro: b.src && !isNew ? 'Diese Buchung kommt aus einem Verkauf. Änderungen bitte dort machen.' : '',
+  fields: x => [{ k: 'date', label: 'Datum', type: 'date', req: true }, { k: 'amount', label: 'Betrag (€)', type: 'money', req: true }, { k: 'cat', label: 'Bereich', type: 'select', opts: x.type === 'in' ? BOOK_CATS_IN : BOOK_CATS_OUT }, { k: 'text', label: 'Text', req: true, full: true, ph: x.type === 'in' ? 'z. B. Wachs an Imkerbedarf' : 'z. B. 50 kg Zucker, 200 Gläser' }, { k: 'receipt', label: 'Beleg (Foto)', type: 'photo' }],
+  validate: v => v.amount <= 0 ? 'Bitte einen Betrag über 0 eintragen.' : (v.src && !isNew ? 'Automatische Buchung – bitte beim Verkauf ändern.' : ''),
+  save: v => { v.amount = r2(v.amount); upsert('bookings', v); toast('Gebucht.'); },
+  del: isNew || b.src ? null : async v => { if (!await confirmBox('Buchung löschen?', 'Löschen', true)) return false; await delPhoto(v.receipt); removeFrom('bookings', v.id); return true; } }; }
+function newBooking(type) { openForm(bookingDef({ type }), { id: pid(), type, date: today(), cat: type === 'in' ? BOOK_CATS_IN[0] : BOOK_CATS_OUT[0], amount: '' }); }
+ACTS.newBookingIn = () => newBooking('in'); ACTS.newBookingOut = () => newBooking('out');
+ACTS.editBooking = id => { const b = byId('bookings', id); openForm(bookingDef(b), b); };
+function syncBooking(src, on, b) { const cur = data.bookings.find(x => x.src === src); if (!on) { if (cur) removeFrom('bookings', cur.id); return; } upsert('bookings', { ...(cur || { id: pid() }), ...b, src, amount: r2(b.amount) }); }
+ACTS.exportCash = y => { const rows = [['Datum', 'Art', 'Bereich', 'Text', 'Betrag']]; data.bookings.filter(b => yearOf(b.date) === Number(y)).sort((a, b) => a.date.localeCompare(b.date)).forEach(b => rows.push([fmtDate(b.date), b.type === 'in' ? 'Einnahme' : 'Ausgabe', b.cat, b.text, deMoney(bookingAmount(b))])); downloadCSV(`imkerei_kasse_${y}.csv`, rows); };
+ACTS.printCash = y => { const bs = data.bookings.filter(b => yearOf(b.date) === Number(y)); const cats = t => [...new Set(bs.filter(b => b.type === t).map(b => b.cat))].map(c => [c, sum(bs.filter(b => b.type === t && b.cat === c), b => b.amount)]); const ins = sum(bs.filter(b => b.type === 'in'), b => b.amount), outs = sum(bs.filter(b => b.type === 'out'), b => b.amount); printHTML('Jahresübersicht ' + y, `${letterhead()}<h1>Einnahmen und Ausgaben ${y}</h1><h2>Einnahmen</h2><table>${cats('in').map(([c, v]) => `<tr><td>${esc(c)}</td><td class="r">${fmtMoney(v)}</td></tr>`).join('')}<tfoot><tr><td>Summe</td><td class="r">${fmtMoney(ins)}</td></tr></tfoot></table><h2>Ausgaben</h2><table>${cats('out').map(([c, v]) => `<tr><td>${esc(c)}</td><td class="r">${fmtMoney(v)}</td></tr>`).join('')}<tfoot><tr><td>Summe</td><td class="r">${fmtMoney(outs)}</td></tr></tfoot></table><p class="big">Ergebnis: ${fmtMoney(ins - outs)}</p><p class="small">Völker im Jahr: ${activeColonies().length}. Für die Steuer gelten bei Imkereien eigene Regeln – im Zweifel Steuerberater fragen.</p>`); };
+
+/* =========================================================
+   Einstellungen, Sicherung, Abgleich, erster Start, Start
+   ========================================================= */
+const STATES = ['Baden-Württemberg', 'Bayern', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg', 'Hessen', 'Mecklenburg-Vorpommern', 'Niedersachsen', 'Nordrhein-Westfalen', 'Rheinland-Pfalz', 'Saarland', 'Sachsen', 'Sachsen-Anhalt', 'Schleswig-Holstein', 'Thüringen'];
+const clubFields = () => [
+  { type: 'sec', label: 'Imkerei (steht auf Etiketten, Quittungen und Bestandsbuch)' }, { k: 'name', label: 'Name der Imkerei', req: true, full: true, ph: 'z. B. Imkerei Gieser – Honig aus Osteel' }, { k: 'owner', label: 'Inhaber/in (Tierhalter/in)', req: true },
+  { k: 'street', label: 'Straße und Hausnummer', full: true }, { k: 'zip', label: 'PLZ' }, { k: 'city', label: 'Ort' }, { k: 'phone', label: 'Telefon', type: 'tel' }, { k: 'email', label: 'E-Mail', type: 'email' }, { k: 'web', label: 'Internet' },
+  { type: 'sec', label: 'Behörde & Verein' }, { k: 'register', label: 'Registriernummer (Tierhaltung)', ph: 'falls vom Veterinäramt vergeben' }, { k: 'vetOffice', label: 'Zuständiges Veterinäramt', ph: 'z. B. Landkreis Aurich, Veterinäramt' }, { k: 'association', label: 'Imkerverein', ph: 'z. B. Imkerverein Norden' }, { k: 'state', label: 'Bundesland', type: 'select', opts: STATES },
+  { k: 'bank', label: 'Bank' }, { k: 'iban', label: 'IBAN (für Quittungen)', type: 'iban' }, { k: 'vatNote', label: 'Steuerhinweis auf Quittungen', full: true, ph: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.' }, { k: 'logo', label: 'Logo', type: 'photo' }
+];
+const ruleFields = () => [
+  { type: 'sec', label: 'Etiketten' }, { k: 'origin', label: 'Ursprungsland', ph: 'Deutschland' }, { k: 'mhdMonths', label: 'Mindesthaltbarkeit ab Abfüllung (Monate)', type: 'number', step: '1' }, { k: 'storage', label: 'Lagerhinweis', full: true },
+  { type: 'sec', label: 'Preise je Glas (€)' }, { k: 'price500', label: '500 g', type: 'money' }, { k: 'price250', label: '250 g', type: 'money' }, { k: 'price30', label: '30 g', type: 'money' }, { k: 'price1000', label: '1 kg', type: 'money' }, { k: 'lowStock', label: 'Warnen ab Restbestand (Gläser)', type: 'number', step: '1' },
+  { type: 'sec', label: 'Bienen' }, { k: 'inspectDays', label: 'Durchsicht spätestens alle … Tage (April–August)', type: 'number', step: '1' }, { k: 'miteLimit', label: 'Varroa-Schwelle: Milben pro Tag (Windel)', type: 'number', step: '1', hint: 'Ab diesem Wert warnt die App. Richtwerte ändern sich mit der Jahreszeit – Imkerverein fragen.' }, { k: 'winterKg', label: 'Wintervorrat Ziel (kg Zucker je Volk)', type: 'number', step: '1' },
+  { type: 'sec', label: 'Sicherung' }, { k: 'backupDays', label: 'An Sicherung erinnern nach (Tagen)', type: 'number', step: '1' }
+];
+VIEWS.settings = () => {
+  const tab = viewState.tab || 'club';
+  return head('Einstellungen', 'Imkerei, Etiketten, Preise, Varroa-Schwelle, Datensicherung und Abgleich zwischen PC und Handy.', '') +
+  `<div class="tabs">${[['club', 'Imkerei'], ['rules', 'Etiketten & Regeln'], ['data', 'Sicherung & Abgleich'], ['about', 'Über']].map(([k, l]) => `<button data-tab="${k}" class="${tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>` +
+  ({ club: () => settingsForm('club', clubFields(), data.club), rules: () => settingsForm('rules', ruleFields(), data.settings), data: dataTab, about: aboutTab }[tab])();
+};
+function settingsForm(kind, fields, obj) { return `<div class="card pad" style="max-width:900px"><form id="setF"><div class="fg">${fields.map(f => fieldHTML(f, obj)).join('')}</div></form><div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="btn btn-p" data-act="saveSettings:${kind}">${svg('check')} Speichern</button></div></div>`; }
+VIEWS.settings.after = () => {
+  const form = $('#setF'); if (!form) return;
+  $$('[data-photo-pick]', form).forEach(b => b.onclick = async () => { const file = await pickFile('image/*'); if (!file) return; const url = await shrinkImage(file, 600, .9); const k = b.dataset.photoPick; form.elements[k].value = url; $(`[data-photo-prev="${k}"]`, form).innerHTML = `<img src="${url}" alt="">`; $(`[data-photo-del="${k}"]`, form)?.classList.remove('hidden'); });
+  $$('[data-photo-del]', form).forEach(b => b.onclick = () => { const k = b.dataset.photoDel; form.elements[k].value = ''; $(`[data-photo-prev="${k}"]`, form).innerHTML = svg('camera'); b.classList.add('hidden'); });
+};
+function parseCoords(s) { const m = /(-?\d{1,2}[.,]\d+)\s*[,;\s]\s*(-?\d{1,3}[.,]\d+)/.exec(String(s || '')); return m ? [Number(m[1].replace(',', '.')), Number(m[2].replace(',', '.'))] : null; }
+ACTS.saveSettings = async kind => {
+  const form = $('#setF'), fields = kind === 'club' ? clubFields() : ruleFields(), v = readForm(form, fields);
+  if (kind === 'club') {
+    if (!v.name) return toast('Bitte den Namen der Imkerei eintragen.', { err: true });
+    if (v.iban && !ibanOk(v.iban)) return toast('Die IBAN stimmt nicht.', { err: true });
+    if (String(v.logo || '').startsWith('data:')) { if (data.club.logo) await delPhoto(data.club.logo); v.logo = await savePhoto(v.logo); } else if (!v.logo && data.club.logo) await delPhoto(data.club.logo);
+    Object.assign(data.club, v);
+  } else { ['mhdMonths', 'inspectDays', 'miteLimit', 'lowStock', 'winterKg', 'backupDays'].forEach(k => v[k] = v[k] === '' ? (freshData().settings[k] ?? '') : Number(v[k])); Object.assign(data.settings, v); }
+  save(); render(); toast('Einstellungen gespeichert.');
+};
+function dataTab() {
+  const d = data.meta.device;
+  return `<div class="grid g2"><div class="card pad"><div class="sec-t"><h3>${svg('download')} Datensicherung</h3></div><p class="muted" style="margin-top:0">Alle Daten liegen nur auf diesem Gerät. Speichere regelmäßig eine Sicherung – z. B. auf einen USB-Stick.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" data-act="backup">${svg('download')} Sicherung speichern</button><button class="btn" data-act="restore">${svg('upload')} Sicherung laden</button></div>
+    <p class="muted small" style="margin-bottom:0">Speicher: ${store.mode === 'idb' ? 'Browser-Datenbank ✓' : 'Notfallspeicher (begrenzt) – bitte oft sichern'} · <a href="#" data-act="persist">Speicher dauerhaft schützen</a></p></div>
+  <div class="card pad"><div class="sec-t"><h3>${svg('sync')} PC und Handy abgleichen</h3></div><p class="muted" style="margin-top:0">Ohne Cloud: Auf einem Gerät eine Abgleich-Datei erstellen, auf dem anderen einlesen. Neue und geänderte Einträge werden zusammengeführt – praktisch, wenn du draußen am Handy die Strecke einträgst.</p>
+    <div class="fg" style="margin-bottom:10px"><div class="f"><label for="dvN">Name dieses Geräts</label><input id="dvN" value="${esc(d.name)}" placeholder="z. B. Handy Bienenstand"></div><div class="f"><label for="dvC">Kürzel (1 Buchstabe)</label><input id="dvC" value="${esc(d.code)}" maxlength="2" placeholder="z. B. H"></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="saveDevice">Gerät speichern</button><button class="btn btn-p" data-act="syncOut">${svg('download')} Abgleich-Datei erstellen</button><button class="btn" data-act="syncIn">${svg('upload')} Abgleich-Datei einlesen</button></div></div>
+  <div class="card pad"><div class="sec-t"><h3>${svg('file')} Daten ausgeben</h3></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="exportCash:${new Date().getFullYear()}">Kasse (Excel)</button></div></div>
+  <div class="card pad" style="border-color:var(--red)"><div class="sec-t"><h3 class="neg">${svg('alert')} Neu anfangen</h3></div><p class="muted" style="margin-top:0">Löscht alle Daten auf diesem Gerät. Vorher unbedingt sichern!</p><button class="btn btn-red" data-act="wipe">Alle Daten löschen</button></div></div>`;
+}
+function aboutTab() { return `<div class="card pad" style="max-width:700px"><div style="display:flex;gap:14px;align-items:center"><div class="crest" style="width:58px;height:58px;font-size:24px;background:transparent">${APP_LOGO}</div><div><h3 style="margin:0">${APPNAME} ${VERSION}</h3><p class="muted" style="margin:2px 0 0">Die App für Imkerinnen und Imker – eine Datei, offline, ohne Abo.</p></div></div><dl class="kv" style="margin-top:16px"><dt>Daten</dt><dd>${plural(activeColonies().length, 'Volk', 'Völker')}, ${plural(data.inspections.length, 'Durchsicht', 'Durchsichten')}, ${plural(data.batches.length, 'Los', 'Lose')}</dd><dt>Gespeichert</dt><dd>nur auf diesem Gerät</dd><dt>Kontakt</dt><dd>Telefon & WhatsApp 0152 030 900 47 · zackservice@t-online.de</dd></dl><p class="small muted">Hinweise zu Bienenseuchenverordnung, Bestandsbuch und Honigkennzeichnung sind sorgfältig zusammengestellt, aber ohne Gewähr. Maßgeblich sind die geltenden Vorschriften und die Vorgaben deines Veterinäramts.</p><p class="small muted">© 2026 Michael Gieser – Osteel</p></div>`; }
+ACTS.persist = async () => { try { const ok = await navigator.storage?.persist?.(); toast(ok ? 'Der Browser löscht die Daten jetzt nicht mehr von selbst.' : 'Der Browser hat abgelehnt. Bitte die App als Lesezeichen oder installierte App nutzen und regelmäßig sichern.'); } catch (e) { toast('Geht in diesem Browser nicht.'); } };
+ACTS.saveDevice = () => { const c = ($('#dvC').value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); data.meta.device = { name: $('#dvN').value.trim(), code: c }; save(); toast('Gerät gespeichert.'); };
+
+/* ---------- Sicherung ---------- */
+async function snapshot() { await flushSave(); const photos = {}; for (const [k, v] of photoCache) photos[k] = v; return { app: APPNAME, version: VERSION, demo: IS_DEMO, created: new Date().toISOString(), data, photos }; }
+ACTS.backup = async () => { const s = await snapshot(); downloadFile(`zackimker_sicherung_${today()}.json`, JSON.stringify(s), 'application/json'); data.meta.lastBackup = new Date().toISOString(); save(); render(); toast('Sicherung gespeichert. Bitte an einem sicheren Ort aufbewahren.'); };
+async function readJsonFile() { const f = await pickFile('.json,application/json'); if (!f) return null; try { return JSON.parse(await f.text()); } catch (e) { toast('Die Datei ist keine ZackImker-Sicherung.', { err: true }); return null; } }
+ACTS.restore = async () => {
+  const s = await readJsonFile(); if (!s) return; if (s.app !== APPNAME || !s.data) return toast('Das ist keine ZackImker-Sicherung.', { err: true });
+  if (!await confirmBox(`Sicherung vom ${fmtDate(s.created.slice(0, 10))} laden? Alle Daten auf diesem Gerät werden ersetzt.`, 'Laden', true)) return;
+  await store.clear(); photoCache.clear(); for (const [k, v] of Object.entries(s.photos || {})) { await store.set(k, v); photoCache.set(k, v); }
+  data = normalize(s.data); data.meta.setupDone = true; await flushSave(); applyTheme(); render(); toast('Sicherung geladen.');
+};
+ACTS.syncOut = async () => { if (!data.meta.device.code) { toast('Bitte zuerst Name und Kürzel für dieses Gerät eintragen und speichern.', { err: true }); return; } const s = await snapshot(); s.sync = true; s.device = data.meta.device; downloadFile(`zackimker_abgleich_${data.meta.device.code}_${today()}.json`, JSON.stringify(s), 'application/json'); toast('Abgleich-Datei erstellt. Jetzt auf dem anderen Gerät einlesen.'); };
+ACTS.syncIn = async () => {
+  const s = await readJsonFile(); if (!s) return; if (s.app !== APPNAME || !s.data) return toast('Das ist keine ZackImker-Datei.', { err: true });
+  if (s.device?.code && s.device.code === data.meta.device.code) return toast('Diese Datei kommt von diesem Gerät selbst (gleiches Kürzel).', { err: true });
+  const r = mergeData(data, normalize(s.data));
+  for (const [k, v] of Object.entries(s.photos || {})) if (!photoCache.has(k)) { await store.set(k, v); photoCache.set(k, v); }
+  save(); render(); toast(`Abgleich fertig: ${r.added} neu, ${r.updated} aktualisiert, ${r.removed} gelöscht.`, { ms: 6000 });
+};
+function mergeData(mine, theirs) {
+  const res = { added: 0, updated: 0, removed: 0 }, delMine = mine.meta.deleted || [], delTheirs = theirs.meta.deleted || [];
+  const isDel = (list, col, id) => list.some(d => d.col === col && d.id === String(id));
+  COLLECTIONS.forEach(col => {
+    const map = new Map(mine[col].map(x => [String(x.id), x]));
+    theirs[col].forEach(x => { const id = String(x.id); if (isDel(delMine, col, id)) return; const cur = map.get(id); if (!cur) { mine[col].push(x); res.added++; } else if ((x.updatedAt || '') > (cur.updatedAt || '')) { Object.keys(cur).forEach(k => delete cur[k]); Object.assign(cur, x); res.updated++; } else if (col === 'charges') { const mp = mergePayments(cur.payments, x.payments); if (mp.length !== cur.payments.length) { cur.payments = mp; res.updated++; } } });
+    const before = mine[col].length; mine[col] = mine[col].filter(x => !isDel(delTheirs, col, String(x.id))); res.removed += before - mine[col].length;
+  });
+  mine.meta.deleted = [...delMine, ...delTheirs.filter(d => !isDel(delMine, d.col, d.id))];
+  if ((theirs.meta.updated || '') > (mine.meta.updated || '')) { mine.club = { ...mine.club, ...theirs.club }; mine.settings = { ...mine.settings, ...theirs.settings }; }
+  return res;
+}
+function mergePayments(a = [], b = []) { const m = new Map(a.map(p => [p.id, p])); b.forEach(p => { if (!m.has(p.id)) m.set(p.id, p); }); return [...m.values()].sort((x, y) => x.date.localeCompare(y.date)); }
+ACTS.wipe = async () => {
+  const md = openModal({ title: 'Alle Daten löschen', body: `<p>Das löscht <b>alle</b> Völker, Durchsichten, Behandlungen, Honig und Einstellungen auf diesem Gerät. Zur Sicherheit bitte <b>LÖSCHEN</b> eintippen.</p><div class="f"><input id="wpT" autocomplete="off"></div>`, foot: `<button class="btn" data-close>Abbrechen</button><button class="btn btn-red" id="wpOk">Endgültig löschen</button>` });
+  $('#wpOk', md).onclick = async () => { if ($('#wpT', md).value.trim() !== 'LÖSCHEN') return toast('Bitte LÖSCHEN eintippen.', { err: true }); await store.clear(); photoCache.clear(); data = normalize(freshData()); if (IS_DEMO) { data = normalize(demoData()); data.meta.setupDone = true; } await flushSave(); closeModal(); document.body.innerHTML = ''; render(); toast('Alle Daten gelöscht.'); };
+};
+ACTS.demoReset = async () => { if (!await confirmBox('Demo auf den Anfang zurücksetzen?', 'Zurücksetzen')) return; await store.clear(); photoCache.clear(); data = normalize(demoData()); data.meta.setupDone = true; await flushSave(); view = 'dashboard'; viewState = {}; render(); toast('Demo zurückgesetzt.'); };
+
+/* ---------- Erster Start ---------- */
+let obStep = 0, obData = {};
+function renderOnboarding() {
+  const steps = [
+    () => `<h1>Willkommen, Imker/in 🐝</h1><p class="muted">${APPNAME} ist deine Imkerei in der Tasche: Stockkarte, Varroa, Bestandsbuch, Honig, Etiketten und Verkauf – auf deinem Gerät, ohne Cloud, ohne Abo. In zwei kurzen Schritten bist du startklar.</p>
+      <div class="grid g2" style="margin:18px 0">${[['hive', 'Völker & Stockkarte'], ['bug', 'Varroa-Zählung mit Warnung'], ['shield', 'Bestandsbuch für das Amt'], ['drop', 'Fütterung & Wintervorrat'], ['truck', 'Wanderung'], ['honey', 'Honigernte'], ['jar', 'Lose & Etiketten'], ['euro', 'Verkauf & Kasse']].map(([i, l]) => `<div style="display:flex;gap:10px;align-items:center">${svg(i)}<span>${l}</span></div>`).join('')}</div>
+      <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap"><button class="btn" data-act="obRestore">${svg('upload')} Sicherung laden</button><button class="btn btn-p" data-act="obNext">Los geht’s ${svg('arrowr')}</button></div>`,
+    () => `<h1>Deine Imkerei</h1><p class="muted">Das steht später auf Etiketten, Quittungen und im Bestandsbuch.</p><form id="obF"><div class="fg">${[{ k: 'name', label: 'Name der Imkerei', req: true, full: true, ph: 'z. B. Imkerei Janssen' }, { k: 'owner', label: 'Dein Name', req: true }, { k: 'street', label: 'Straße und Hausnummer' }, { k: 'zip', label: 'PLZ' }, { k: 'city', label: 'Ort' }].map(f => fieldHTML(f, obData)).join('')}</div></form>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:18px"><button class="btn" data-act="obBack">Zurück</button><button class="btn btn-p" data-act="obNext">Weiter ${svg('arrowr')}</button></div>`,
+    () => `<h1>Deine Bienen</h1><p class="muted">Wo stehen sie, und wie viele Völker hast du? Die Völker werden durchnummeriert – Namen und Königin trägst du später ein.</p><form id="obF"><div class="fg">${[{ k: 'stand', label: 'Name deines Bienenstands', req: true, ph: 'z. B. Garten' }, { k: 'count', label: 'Anzahl Völker', type: 'number', step: '1' }, { k: 'hive', label: 'Beute', type: 'select', opts: HIVES }].map(f => fieldHTML(f, obData)).join('')}</div></form>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:18px"><button class="btn" data-act="obBack">Zurück</button><button class="btn btn-p" data-act="obFinish">${svg('check')} Fertig – los geht’s!</button></div>`
+  ];
+  document.body.innerHTML = `<div class="ob"><div style="display:flex;gap:10px;align-items:center;margin-bottom:16px"><div class="crest" style="background:transparent">${APP_LOGO}</div><b style="font-size:18px">${APPNAME}</b></div><div class="card"><div class="steps">${steps.map((_, i) => `<i class="${i <= obStep ? 'on' : ''}"></i>`).join('')}</div>${steps[obStep]()}</div></div><div id="toasts" class="toasts"></div>`;
+}
+function obGrab() { const f = $('#obF'); if (f) Object.assign(obData, readForm(f, [{ k: 'name' }, { k: 'owner' }, { k: 'street' }, { k: 'zip' }, { k: 'city' }, { k: 'stand' }, { k: 'count' }, { k: 'hive' }].filter(x => f.elements[x.k]))); }
+ACTS.obNext = () => { obGrab(); if (obStep === 1 && (!obData.name || !obData.owner)) return toast('Bitte Name der Imkerei und deinen Namen eintragen.', { err: true }); obStep++; renderOnboarding(); };
+ACTS.obBack = () => { obGrab(); obStep--; renderOnboarding(); };
+ACTS.obRestore = () => ACTS.restore();
+ACTS.obFinish = async () => {
+  obGrab(); if (!obData.stand) return toast('Bitte den Bienenstand benennen.', { err: true });
+  Object.assign(data.club, { name: obData.name, owner: obData.owner, street: obData.street, zip: obData.zip, city: obData.city });
+  const sid = pid(); upsert('stands', { id: sid, name: obData.stand, kind: 'Heimstand', place: [obData.street, obData.city].filter(Boolean).join(', ') });
+  for (let i = 1; i <= Math.min(60, Number(obData.count) || 0); i++) data.colonies.push(touch({ id: pid(), no: String(i), stand: sid, hive: obData.hive || 'Zander', origin: 'Sonstiges', since: today() }));
+  data.meta.setupDone = true; await flushSave(); document.body.innerHTML = ''; view = 'dashboard'; render(); toast('Startklar! Als Nächstes: erste Durchsicht eintragen.', { ms: 6000 });
+};
+
+/* ---------- Start ---------- */
+async function boot() {
+  await store.init();
+  let saved; try { saved = await store.get('data'); } catch (e) { saved = null; }
+  if (!saved && IS_DEMO) { saved = demoData(); saved.meta.setupDone = true; }
+  data = normalize(saved || freshData());
+  await loadPhotos(); applyTheme();
+  const h = location.hash.slice(1); if (VIEWS[h]) view = h;
+  if (!saved || IS_DEMO) await flushSave();
+  render();
+  if (store.mode !== 'idb') toast('Hinweis: Der Browser erlaubt nur den Notfallspeicher. Bitte oft sichern.', { ms: 7000 });
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http') && window.__ZI_SW__) navigator.serviceWorker.register('sw.js').catch(() => {});
+  window.__ready = true;
+}
+window.addEventListener('beforeunload', () => { if (saveTimer) { clearTimeout(saveTimer); store.set('data', data); } });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && saveTimer) flushSave(); });
+
+/* =========================================================
+   Demo-Daten: Imkerei Ubben – Honig aus Osteel (alles erfunden)
+   ========================================================= */
+function demoData() {
+  const d = normalize(freshData()), T = today(), Y = Number(T.slice(0, 4)); data = d;
+  let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const pick = a => a[Math.floor(rnd() * a.length)], rint = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+  Object.assign(d.club, { name: 'Imkerei Ubben – Honig aus Osteel', owner: 'Hinrich Ubben', street: 'Leegeweg 14', zip: '26529', city: 'Osteel', phone: '04934 77 12 3', email: 'honig@imkerei-ubben.de', web: 'www.imkerei-ubben.de', register: '03 452 017 0815', vetOffice: 'Landkreis Aurich – Veterinäramt', association: 'Imkerverein Norden und Umgebung', iban: 'DE89370400440532013000', bank: 'Sparkasse Aurich-Norden' });
+  Object.assign(d.settings, { price1000: 13, winterKg: 15 });
+  const S = (name, x) => { const s = { id: pid(), name, ...x }; d.stands.push(s); return s.id; };
+  const garten = S('Garten Leegeweg', { kind: 'Heimstand', place: 'Leegeweg 14, Osteel', vetDate: `${Y - 6}-04-02`, trees: 'Obstbäume, Linde, Weißklee' });
+  const wiese = S('Obstwiese Janssen', { kind: 'Außenstand', place: 'Upstalsboomweg, Osteel', owner: 'Gerd Janssen, 0171 2345678', vetDate: `${Y - 3}-03-20`, trees: 'Apfel, Kirsche, Brombeere' });
+  const raps = S('Rapsfeld Upende', { kind: 'Wanderstand', place: 'Feldweg hinter Hof Saathoff, Upende', owner: 'Landwirt Saathoff', vetDate: `${Y}-04-08`, trees: 'Raps (April–Mai)' });
+  const C = (no, name, stand, qy, x = {}) => { const c = { id: pid(), no: String(no), name, stand, hive: 'Zander', origin: pick(['Ableger', 'Ableger', 'Schwarm', 'Gekauft']), since: `${qy}-06-${pad2(rint(1, 28))}`, queenYear: qy, queenRace: pick(['Carnica', 'Carnica', 'Buckfast']), queenMarked: true, ...x }; d.colonies.push(c); return c; };
+  const cs = [C(1, 'Goldie', garten, Y - 1), C(2, '', garten, Y), C(3, 'Sanfte Liese', garten, Y - 2), C(4, '', garten, Y - 1), C(5, '', wiese, Y), C(6, 'Wilde Hilde', wiese, Y - 1, { queenRace: 'Buckfast' }), C(7, '', wiese, Y - 2), C(8, '', wiese, Y), C(9, 'Ableger Mai', garten, Y, { origin: 'Ableger', since: `${Y}-05-20` }), C(10, '', garten, Y, { origin: 'Schwarm', since: `${Y}-06-02`, queenMarked: false, queenRace: 'Hybrid / unbekannt' })];
+  C(11, '', wiese, Y - 3, { endDate: `${Y}-02-18`, endReason: 'Eingegangen (Winterverlust)' }); C(12, '', garten, Y - 2, { endDate: `${Y}-05-28`, endReason: 'Aufgelöst / vereinigt' });
+  // Wanderung Raps
+  d.moves.push({ id: pid(), date: `${Y}-04-10`, to: raps, colonies: cs.slice(4, 8).map(c => c.id), trach: 'Raps', until: `${Y}-05-15`, back: `${Y}-05-16`, certNeeded: false, reported: true });
+  // Durchsichten
+  cs.forEach(c => { let dd = `${Y}-04-0${rint(2, 8)}`; if (c.since > dd) dd = addDays(c.since, 5); while (dd <= `${Y}-09-20` && dd <= T) { const m = Number(dd.slice(5, 7)); const sw = m === 5 && rnd() < .3; d.inspections.push({ id: pid(), colony: c.id, date: dd, frames: m < 5 ? `${rint(6, 10)} Waben` : `${rint(1, 2)} Zargen + ${rint(0, 2)} HR`, brood: pick(['geschlossen', 'geschlossen', 'geschlossen', 'lückig']), eggs: rnd() < .8, queenSeen: rnd() < .4, cells: sw ? rint(2, 8) : 0, swarm: sw ? pick(['Spielnäpfchen', 'Schwarmstimmung']) : 'keine', temper: c.name === 'Wilde Hilde' ? 2 : rint(3, 4), calm: rint(2, 4), food: pick(['reichlich', 'ausreichend', 'ausreichend', 'knapp']), honeyRooms: m >= 5 && m <= 7 ? rint(1, 2) : 0, action: sw ? 'Weiselzellen gebrochen' : m === 4 ? 'Honigraum aufgesetzt' : rnd() < .25 ? 'Drohnenrahmen geschnitten' : '', note: '' }); dd = addDays(dd, rint(7, 11)); } });
+  // Varroa
+  cs.forEach((c, i) => { [[`${Y}-07-0${rint(1, 9)}`, rint(4, 26)], [`${Y}-08-25`, rint(1, 8)], [`${Y}-10-15`, rint(0, 3)]].forEach(([dt, n]) => { if (dt <= T && c.since < dt) d.mites.push({ id: pid(), colony: c.id, date: dt, method: 'Gemülldiagnose (Windel)', days: 3, count: n * 3 }); }); });
+  const lateC = cs[2]; d.mites.push({ id: pid(), colony: lateC.id, date: addDays(T, -6), method: 'Gemülldiagnose (Windel)', days: 3, count: 42 });
+  // Behandlungen
+  d.treatments.push({ id: pid(), date: `${Y - 1}-12-18`, colonies: cs.filter(c => c.queenYear < Y).map(c => c.id), drug: 'Oxalsäure (Träufeln/Sprühen)', active: 'Oxalsäuredihydrat', amount: 50, unit: 'ml', method: 'Träufeln', batch: 'OX-2311', receipt: 'Apotheke Marienhafe, Beleg 118', wait: 0, by: 'Hinrich Ubben', temp: 3 });
+  d.treatments.push({ id: pid(), date: `${Y}-07-28`, dateEnd: `${Y}-08-08`, colonies: cs.map(c => c.id), drug: 'Ameisensäure 60 %', active: 'Ameisensäure', amount: 200, unit: 'ml', method: 'Verdunster (Langzeit)', batch: 'AS-2604', receipt: 'Imkerbedarf Nord, Rechnung 2026-331', wait: 0, by: 'Hinrich Ubben', temp: 22 });
+  d.treatments.push({ id: pid(), date: `${Y}-09-05`, colonies: [cs[5].id, cs[6].id], drug: 'Ameisensäure 60 %', active: 'Ameisensäure', amount: 100, unit: 'ml', method: 'Verdunster (Kurzzeit)', batch: 'AS-2604', receipt: 'Imkerbedarf Nord, Rechnung 2026-331', wait: 0, by: 'Hinrich Ubben', temp: 19, note: 'Nachbehandlung – Befall noch hoch' });
+  // Fütterung
+  [[`${Y}-08-10`, 'Futtersirup', 8], [`${Y}-08-24`, 'Futtersirup', 6], [`${Y}-09-08`, 'Zuckerwasser 3:2', 5]].forEach(([dt, k, a]) => { if (dt <= T) d.feedings.push({ id: pid(), date: dt, kind: k, amount: a, unit: k === 'Futtersirup' ? 'kg' : 'l', colonies: cs.map(c => c.id) }); });
+  d.feedings.push({ id: pid(), date: `${Y}-06-10`, kind: 'Futterteig', amount: 1, unit: 'kg', colonies: [cs[8].id, cs[9].id], note: 'Ableger und Schwarm angefüttert' });
+  // Ernte
+  const H = (dt, sort, kg, w, ids, st) => { const h = { id: pid(), date: dt, sort, kg, water: w, colonies: ids, stand: st }; d.harvests.push(h); return h; };
+  const h1 = H(`${Y}-05-17`, 'Rapshonig', 98, 17.2, cs.slice(4, 8).map(c => c.id), raps), h2 = H(`${Y}-05-24`, 'Frühtracht', 64, 17.6, cs.slice(0, 4).map(c => c.id), garten), h3 = H(`${Y}-07-19`, 'Sommertracht', 142, 17.9, cs.slice(0, 8).map(c => c.id), ''), h4 = H(`${Y}-07-21`, 'Lindenhonig', 28, 18.4, [cs[0].id, cs[2].id], garten);
+  H(`${Y - 1}-05-20`, 'Rapshonig', 86, 17.4, cs.slice(4, 8).map(c => c.id), raps); H(`${Y - 1}-07-22`, 'Sommertracht', 120, 17.8, cs.slice(0, 8).map(c => c.id), '');
+  // Abfüllung
+  const B = (dt, lot, sort, tex, size, jars, price, hs) => { const b = { id: pid(), date: dt, lot, sort, texture: tex, size, jars, price, mhd: addMonths(dt, 24).slice(0, 7), harvests: hs, seal: true }; d.batches.push(b); return b; };
+  const b1 = B(`${Y}-06-02`, `L ${Y}-01`, 'Rapshonig', 'cremig gerührt', 500, 150, 7, [h1.id]), b2 = B(`${Y}-06-09`, `L ${Y}-02`, 'Frühtracht', 'cremig gerührt', 500, 110, 7, [h2.id]), b3 = B(`${Y}-06-09`, `L ${Y}-03`, 'Frühtracht', 'cremig gerührt', 250, 30, 4.5, [h2.id]);
+  const b4 = B(`${Y}-08-01`, `L ${Y}-04`, 'Sommertracht', 'flüssig', 500, 220, 7.5, [h3.id]), b5 = B(`${Y}-08-01`, `L ${Y}-05`, 'Lindenhonig', 'flüssig', 500, 52, 8, [h4.id]), b6 = B(`${Y}-08-02`, `L ${Y}-06`, 'Sommertracht', 'flüssig', 30, 120, 1.5, [h3.id]);
+  // Kunden
+  const cust = ['Anke Freese', 'Gerd Saathoff', 'Silke Eilers', 'Tjark Meyer', 'Hofladen Behrends', 'Café Deichblick', 'Heike Janssen', 'Uwe Rademacher', 'Imke Tjaden', 'Bäckerei Onken'].map((n, i) => { const [f, ...l] = n.split(' '); const m = { id: pid(), first: i === 4 || i === 5 || i === 9 ? '' : f, last: i === 4 || i === 5 || i === 9 ? n : l.join(' '), kind: i === 4 ? 'Wiederverkäufer / Hofladen' : i === 5 ? 'Gastronomie' : i === 9 ? 'Firma' : 'Privat', phone: '01' + pick(['51', '60', '71']) + ' ' + rint(1000000, 9999999), city: pick(['Osteel', 'Marienhafe', 'Norden', 'Upgant-Schott']) }; d.members.push(m); return m; });
+  // Verkäufe
+  const lots = [b1, b2, b3, b4, b5, b6];
+  for (let i = 0; i < 95; i++) { const b = pick(lots), dt = addDays(b.date, rint(1, 160)); if (dt > T) continue; const big = rnd() < .12, m = big ? pick(cust.slice(4, 6)) : rnd() < .5 ? pick(cust) : null; const qty = big ? rint(10, 24) : rint(1, 4); if (batchStockDemo(d, b) < qty) continue; d.sales.push({ id: pid(), date: dt, batch: b.id, qty, price: big ? r2(b.price * .8) : b.price, member: m?.id || '', customer: m ? '' : pick(['', '', 'Markt Norden', 'Nachbarin']), paid: !(big && rnd() < .2) }); }
+  d.sales.forEach(s => { if (s.paid) { const b = d.batches.find(x => x.id === s.batch); d.bookings.push({ id: pid(), date: s.date, type: 'in', cat: 'Honigverkauf', amount: r2(s.qty * s.price), text: `${s.qty} × ${b.sort} ${b.size} g`, src: 'sale:' + s.id }); } });
+  const X = (dt, cat, amt, text) => { if (dt <= T) d.bookings.push({ id: pid(), date: dt, type: 'out', cat, amount: amt, text }); };
+  X(`${Y}-02-12`, 'Mittelwände', 148, '20 kg Mittelwände Zander (Wachsumarbeitung)'); X(`${Y}-03-01`, 'Beiträge (Verein, Tierseuchenkasse)', 42, 'Beitrag Imkerverein inkl. Versicherung'); X(`${Y}-03-15`, 'Beuten & Material', 289.9, '2 Zander-Beuten komplett'); X(`${Y}-05-28`, 'Gläser & Deckel', 214.5, '300 Gläser 500 g mit Deckel'); X(`${Y}-05-28`, 'Etiketten', 49, 'Gewährverschlüsse und Etiketten'); X(`${Y}-07-20`, 'Varroa-Mittel', 64.8, 'Ameisensäure 60 %, 5 l'); X(`${Y}-08-05`, 'Futter / Zucker', 312, 'Futtersirup 280 kg'); X(`${Y}-06-15`, 'Königinnen / Völker', 95, '2 begattete Carnica-Königinnen'); X(`${Y}-04-10`, 'Fahrtkosten / Wanderung', 36, 'Fahrten Raps');
+  d.bookings.push({ id: pid(), date: `${Y}-10-02`, type: 'in', cat: 'Wachs / Mittelwände', amount: 85, text: 'Altwachs an Imkerbedarf Nord' });
+  d.tasks.push({ id: pid(), title: 'Winterbehandlung Oxalsäure (bei Brutfreiheit)', due: `${Y}-12-20`, done: false }, { id: pid(), title: 'Mäusegitter kontrollieren', due: addDays(T, 3), done: false }, { id: pid(), title: 'Wachs schmelzen und Rähmchen säubern', due: addDays(T, 30), done: false });
+  d.meta.lastBackup = addDays(T, -2) + 'T19:00:00.000Z';
+  return d;
+}
+function batchStockDemo(d, b) { return b.jars - d.sales.filter(s => s.batch === b.id).reduce((a, s) => a + s.qty, 0); }
+</script>
+<script>boot();</script>
+</body>
+</html>
