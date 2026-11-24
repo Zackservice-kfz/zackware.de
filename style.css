@@ -121,3 +121,4 @@ h1 em,h2 em{font-style:normal;color:var(--or)}
 
 .card{position:relative}.tag{position:absolute;top:-11px;right:18px;background:var(--ink);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px}
 #appgrid{margin-top:34px}
+.ah span.new,.ah h1 .new{color:#fff}
